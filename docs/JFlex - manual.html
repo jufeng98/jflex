@@ -1,0 +1,3264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0028)https://jflex.de/manual.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+          content="This is the homepage of JFlex. JFlex is a lexer/scanner generator for Java, written in Java, with emphasis on Unicode support, speed and platform independence">
+    <meta name="keywords"
+          content="jflex, jlex, lexer, scanner generator, lexer generator, flex java, lex java, flex, lex, lexical analysis, lexer, scanner, generator, finite automata, dfa, nfa, fast, lexical analyser, lexical analyzer">
+    <meta name="author" content="Gerwin Klein">
+    <meta name="generator" content="pandoc">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    
+    <title>JFlex - 手册 </title>
+
+    <link href="./JFlex - manual_files/bootstrap.min.css" rel="stylesheet">
+    <link href="./JFlex - manual_files/jflex.css" rel="stylesheet">
+    <link rel="stylesheet" href="./JFlex - manual_files/manual.css">
+
+</head>
+
+<body>
+<nav id="header" class="navbar navbar-inverse" role="navigation">
+    <div id="title">手册</div>
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <!-- Draw hamburger icon -->
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a id="brand" class="navbar-brand">手册</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="https://jflex.de/">主页</a></li>
+                <li><a href="https://jflex.de/features.html">特性</a></li>
+                <li><a href="https://jflex.de/download.html">下载</a></li>
+                <li><a href="https://jflex.de/docu.html">文档</a></li>
+                <li><a href="https://jflex.de/help.html">支持</a></li>
+                <li><a href="https://jflex.de/contact.html">联系</a></li>
+                <li><a href="https://github.com/jflex-de/jflex">源代码</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://github.com/jflex-de/">
+                    <img src="./JFlex - manual_files/GitHub-Mark-Light-64px.png" alt="JFlex on github" width="32"
+                         height="32/">
+                </a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div id="content" class="container">
+    <style type="text/css">
+        code {
+            white-space: pre-wrap;
+        }
+
+        span.smallcaps {
+            font-variant: small-caps;
+        }
+
+        div.columns {
+            display: flex;
+            gap: min(4vw, 1.5em);
+        }
+
+        div.column {
+            flex: auto;
+            overflow-x: auto;
+        }
+
+        div.hanging-indent {
+            margin-left: 1.5em;
+            text-indent: -1.5em;
+        }
+
+        ul.task-list {
+            list-style: none;
+        }
+
+        ul.task-list li input[type="checkbox"] {
+            width: 0.8em;
+            margin: 0 0.8em 0.2em -1.6em;
+            vertical-align: middle;
+        }
+
+        .display.math {
+            display: block;
+            text-align: center;
+            margin: 0.5rem auto;
+        }
+
+        /* CSS for citations */
+        div.csl-bib-body {
+        }
+
+        div.csl-entry {
+            clear: both;
+        }
+
+        .hanging-indent div.csl-entry {
+            margin-left: 2em;
+            text-indent: -2em;
+        }
+
+        div.csl-left-margin {
+            min-width: 2em;
+            float: left;
+        }
+
+        div.csl-right-inline {
+            margin-left: 2em;
+            padding-left: 1em;
+        }
+
+        div.csl-indent {
+            margin-left: 2em;
+        }
+    </style>
+    <header id="title-block-header">
+        <h1 class="title">JFlex 用户手册</h1>
+    </header>
+    <center>
+        <p><img src="./JFlex - manual_files/jflex-black.png" alt="jflex"></p>
+        <p>快速词法分析器生成器</p>
+        <p>版权所有 © 1998–2020 by
+            <a href="http://www.doclsf.de/">Gerwin Klein</a>,
+            Steve Rowe, and
+            <a href="http://regis.decamps.info/">Régis Décamps</a>.
+        </p>
+        版本 1.9.1, 11 3月 2023
+    </center>
+    <h1 id="table-of-contents">目录</h1>
+    <ul>
+        <li><a href="#Intro">介绍</a>
+            <ul>
+                <li><a href="#design-goals">设计目标</a></li>
+                <li><a href="#about-this-manual">关于手册</a></li>
+            </ul>
+        </li>
+        <li><a href="#Installing">安装和运行JFlex</a>
+            <ul>
+                <li><a href="#installing-jflex">安装 JFlex</a></li>
+                <li><a href="#running-jflex">运行 JFlex</a></li>
+                <li><a href="#jflex-maven-plugin">Maven 插件</a></li>
+                <li><a href="#jflex-ant-task">JFlex Ant 任务</a></li>
+            </ul>
+        </li>
+        <li><a href="#Example">一个简单的例子：如何使用JFlex</a>
+            <ul>
+                <li><a href="#ExampleUserCode">要包含的代码</a></li>
+                <li><a href="#ExampleOptions">选项和宏</a></li>
+                <li><a href="#ExampleLexRules">规则和动作</a></li>
+                <li><a href="#how-to-get-it-building">如何构建</a></li>
+            </ul>
+        </li>
+        <li><a href="#Specifications">词法规范</a>
+            <ul>
+                <li><a href="#user-code">用户代码</a></li>
+                <li><a href="#options-and-declarations">选项和声明</a></li>
+                <li><a href="#LexRules">词法规则</a></li>
+            </ul>
+        </li>
+        <li><a href="#GeneratedJavaCode">生成的类</a>
+            <ul>
+                <li><a href="#GeneratedClassName">生成类的名称</a></li>
+                <li><a href="#ScanningMethod">扫描方法</a></li>
+                <li><a href="#ScannerMethods">在动作中(API)可访问的扫描器方法和字段</a></li>
+            </ul>
+        </li>
+        <li><a href="#sec:encodings">编码、平台和Unicode</a>
+            <ul>
+                <li><a href="#the-problem">问题</a></li>
+                <li><a href="#scanning-text-files">扫描文本文件</a></li>
+                <li><a href="#scanning-binaries">扫描二进制文件</a></li>
+                <li><a href="#unicoderegexconformance">符合Unicode正则表达式UTS#18</a></li>
+            </ul>
+        </li>
+        <li><a href="#performance">关于性能的几句话</a></li>
+        <li><a href="#Porting">移植问题</a>
+            <ul>
+                <li><a href="#porting-from-jlex">从JLex移植</a></li>
+                <li><a href="#porting-from-lexflex">从lex/flex移植</a></li>
+            </ul>
+        </li>
+        <li><a href="#WorkingTog">协同工作</a>
+            <ul>
+                <li><a href="#CUPWork">JFlex和CUP</a></li>
+                <li><a href="#BYaccJ">JFlex和BYacc/J</a></li>
+                <li><a href="#jflex-and-jay">JFlex和Jay</a></li>
+            </ul>
+        </li>
+        <li><a href="#Bugs">缺陷和不足</a>
+            <ul>
+                <li><a href="#deficiencies">不足</a></li>
+                <li><a href="#bugs">缺陷</a></li>
+            </ul>
+        </li>
+        <li><a href="#Copyright">复制和许可</a></li>
+        <li><a href="#references">引用</a></li>
+    </ul>
+    <h1 id="Intro">介绍</h1>
+    <p>
+        JFlex是一个用Java编写的Java词法分析器生成器。它也是对普林斯顿大学Elliot Berk开发的JLex（Berk 1996）工具的重写。正如Vern
+        Paxson在他的C/C++工具flex（Paxson 1995）中所说：它们不共享任何代码。
+    </p>
+    <p>
+        词法分析器生成器将包含一组正则表达式和相应动作的规范作为输入。它生成一个程序（词法分析器），读取输入，将输入与规范文件中的正则表达式进行匹配，
+        如果正则表达式匹配，则执行相应的操作。词法分析器通常是编译器的第一步，匹配关键字、注释、运算符等，并为解析器生成输入令牌流。它们还可以用于许多其他目的。
+    </p>
+    <h2 id="design-goals">设计目标</h2>
+    <p>JFlex主要设计目标如下:</p>
+    <ul>
+        <li><strong>Unicode 支持</strong></li>
+        <li><strong>快速生成扫描器</strong></li>
+        <li><strong>便捷的规范语法</strong></li>
+        <li><strong>平台独立</strong></li>
+        <li><strong>JLex兼容</strong></li>
+    </ul>
+    <h2 id="about-this-manual">关于手册</h2>
+    <p>
+        本手册简要而完整地介绍了JFlex工具。它假设您熟悉解析中的词法分析主题。参考Aho、Sethi和Ullman（1986）和Appel（1998）的文献，它们提供了很好的介绍。
+    </p>
+    <p>
+        本手册的下一节将介绍JFlex<a href="#Installing">安装过程</a>。
+        <a href="#Example">和JFlex工作</a> 该节会运行一个示例规范并解释其工作原理。
+        <a href="#Specifications">词法规范</a>部分介绍了所有JFlex选项和完整的规范语法；
+        <a href="#sec:encodings">编码、平台和Unicode</a> 提供有关Unicode和扫描文本与二进制文件的信息。
+        <a href="#performance">关于性能的几句话</a>给出了如何编写高效扫码器的提示。
+        <a href="#Porting">移植扫描器</a>部分展示了如何移植JLex，<code>lex</code>以及来自于C的<code>flex</code>工具。
+        最后，<a href="#WorkingTog">协同工作</a>讨论了JFlex扫描器和LALR解析器生成器CUP， CUP2， BYacc/J， Jay的协作。
+    </p>
+    <h1 id="Installing">安装和运行JFlex</h1>
+    <h2 id="installing-jflex">安装JFlex</h2>
+    <h3 id="windows">Windows</h3>
+    <p>为了在Windows安装JFlex， 遵循以下步骤:</p>
+    <ol type="1">
+        <li>
+            将下载的文件解压到JFlex所在的目录中。如解压到<code>C:\</code>，则应生成以下目录结构：
+        </li>
+    </ol>
+    <pre><code>
+        C:\jflex-1.9.1\
+        +--bin\                      (start scripts)
+        +--doc\                      (manual)
+        +--examples\
+            +--byaccj\               (calculator example for BYacc/J)
+            +--common\               (shared Makefile and ant build files)
+            +--cup-interpreter\      (interpreter example for cup)
+            +--cup-java\             (Java lexer specification for use with cup)
+            +--cup-java-minijava\    (example scanner from the manual)
+            +--cup-lcalc\            (calculator example for cup and maven)
+            +--simple\               (example scanner with no parser)
+            +--standalone\           (a simple standalone scanner)
+            +--zero-reader\          (Readers that return 0 characters)
+        +--lib\                      (precompiled classes)
+        +--src\
+            +--main\
+                +--config\           (PMD source analyzer configuration)
+                +--cup\              (JFlex parser spec)
+                +--java\jflex\       (source code of JFlex)
+                +--jflex\            (JFlex scanner spec)
+                +--resources\        (messages and default skeleton file)
+            +--test\                 (unit tests)
+    </code></pre>
+    <ol start="2" type="1">
+        <li>
+            <p>
+                编辑文件<strong><code>bin\jflex.bat</code></strong> (例子里的<code>C:\jflex-1.9.1\bin\jflex.bat</code>)
+            </p>
+            <ul>
+                <li>
+                    <p>
+                        <strong><code>JAVA_HOME</code></strong>包含您的JDK安装的目录 (用于安装<code>C:\java</code>)
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <strong><code>JFLEX_HOME</code></strong>包含JFlex目录(位于例子: <code>C:\jflex-1.9.1</code>)
+                    </p>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <p>
+                将JFlex的<code>bin\</code>目录加入到系统path(目录中包含启动脚本，位于例子:<code>C:\jflex-1.9.1\bin</code>)。
+            </p>
+        </li>
+    </ol>
+    <h3 id="macunix-with-tar">带有 tar Mac/Unix</h3>
+    <p>为了在Mac或者Unix系统安装JFlex， 遵循如下步骤:</p>
+    <ul>
+        <li>
+            <p>
+                使用GNU tar将存档解压到您选择的目录中， 例如<code>/usr/share</code>:
+            </p>
+            <p>
+                <code>tar -C /usr/share -xvzf jflex-1.9.1.tar.gz</code>
+            </p>
+            <p>
+                （这个例子是站点范围的安装，需要是root用户。普通用户安装的方式完全相同—只需选择一个有写权限的目录）
+            </p>
+        </li>
+        <li>
+            <p>
+                从二进制路径中的某个位置创建一个符号链接到<code>bin/jflex</code>，例如:
+            </p>
+            <p>
+                <code>ln -s /usr/share/jflex-1.9.1/bin/jflex /usr/bin/jflex</code>
+            </p>
+            <p>
+                如果Java解释器不在二进制路径中，则需要在脚本<code>bin/jflex</code>提供它的位置。
+            </p>
+        </li>
+    </ul>
+    <p>
+        您可以使用<a href="http://jflex.de/download.html">JFlex下载页面</a>上提供的SHA1校验和验证下载文件的完整性。如果将校验和文件放在与存档相同的目录中，并运行：
+    </p>
+    <p>
+        <code>shasum --check jflex-1.9.1.tar.gz.sha1</code>
+    </p>
+    <p>应该会告诉您</p>
+    <p>
+        <code>jflex-1.9.1.tar.gz: OK</code>
+    </p>
+    <h2 id="running-jflex">运行JFlex</h2>
+    <p>使用如下命令运行JFlex:</p>
+    <p>
+        <code>jflex &lt;options&gt; &lt;inputfiles&gt;</code>
+    </p>
+    <p>
+        也可以跳过位于<code>bin/</code>下的启动脚本，此时需要将文件<code>lib/jflex-1.9.1.jar</code>加入到<code>CLASSPATH</code>环境变量中。
+    </p>
+    <p>接着可以使用如下命令运行JFlex:</p>
+    <p>
+        <code>java jflex.Main &lt;options&gt; &lt;inputfiles&gt;</code>
+    </p>
+    <p>或者:</p>
+    <p>
+        <code>java -jar jflex-1.9.1.jar &lt;options&gt; &lt;inputfiles&gt;</code>
+    </p>
+    <p>
+        在这两种情况下，输入文件和选项都是可选的。如果您没有在命令行上提供文件名，JFlex将弹出一个窗口，要求您提供一个文件名。
+    </p>
+    <p>JFlex 有如下选项:</p>
+    <p>
+        <code>-d &lt;directory&gt;</code><br>
+        将生成的文件写入目录
+        <code>&lt;directory&gt;</code>
+    </p>
+    <p><code>--encoding &lt;name&gt;</code><br>
+        使用字符编码<code>&lt;name&gt;</code>(例如&nbsp;<code>utf-8</code>) 读取词法规范然后写入java文件。
+    </p>
+    <p>
+        <code>--skel &lt;file&gt;</code><br>
+        使用UTF-8编码的外部骨架<code>&lt;file&gt;</code>。这主要用于JFlex维护和特殊的低级定制。只有当你知道自己在做什么时才使用！
+        JFlex在<code>src</code>目录中附带了一个骨架文件，该文件准确反映了内部预编译的骨架，可以与<code>-skel</code>选项一起使用。
+    </p>
+    <p>
+        <code>--nomin</code><br>
+        在扫描器生成期间跳过DFA最小化步骤。
+    </p>
+    <p>
+        <code>--jlex</code><br>
+        尽可能的遵守JLex对规范的解释。
+    </p>
+    <p>
+        <code>--dot</code><br>
+        为NFA、DFA和最小化DFA生成graphviz点文件。此功能仍处于alpha状态，尚未完全实现。
+    </p>
+    <p>
+        <code>--dump</code><br>
+        显示NFA、初始DFA和最小化DFA的转换表
+    </p>
+    <p>
+        <code>--legacydot</code><br>
+        点(<code>.</code>)元字符匹配<code>[^\n]</code>而不是<br>
+        <code>[^\n\r\u000B\u000C\u0085\u2028\u2029]</code>
+    </p>
+    <p>
+        <code>--verbose</code> 或者 <code>-v</code><br>
+        显示生成进度消息（默认启用）
+    </p>
+    <p>
+        <code>--quiet</code> 或者 <code>-q</code><br>
+        仅显示错误消息（不讨论JFlex当前正在做什么）
+    </p>
+    <p><code>--warn-&lt;warning&gt;</code><br>
+        切换警告类型，选项<code>&lt;warning&gt;</code>可以是<br>
+        <code>unused</code>， <code>never-match</code>， <code>empty-match</code>，
+        <code>cupsym-after-cup</code>， <code>unicode-too-long</code>，
+        <code>all</code>。
+    </p>
+    <p><code>--no-warn-&lt;warning&gt;</code><br>
+        抑制特定类型的警告 <code>&lt;warning&gt;</code>可以是
+        <code>unused</code>， <code>never-match</code>， <code>empty-match</code>，
+        <code>cupsym-after-cup</code>， <code>unicode-too-long</code>，
+        <code>all</code>。
+    </p>
+    <p>
+        <code>--time</code><br>
+        显示代码生成过程的时间统计信息（不是很准确）
+    </p>
+    <p>
+        <code>--version</code><br>
+        打印版本号
+    </p>
+    <p>
+        <code>--info</code><br>
+        打印系统和JDK信息（如果您想报告问题，这很有用）
+    </p>
+    <p>
+        <code>--unicodever &lt;ver&gt;</code><br>
+        打印Unicode版本<code>&lt;ver&gt;</code>的所有支持属性
+    </p>
+    <p>
+        <code>--help</code> 或者 <code>-h</code><br>
+        打印一条帮助消息，解释JFlex的选项和用法。
+    </p>
+    <h2 id="jflex-maven-plugin">JFlex Maven 插件</h2>
+    <p>
+        插件会读取JFlex语法规范文件(<code>.jflex</code>)然后生成Java解析器(默认位于<code>target/generated-source/jflex</code>)。
+    </p>
+    <h3 id="usage">用法</h3>
+    <h4 id="minimal-configuration">最少配置</h4>
+    <p>
+        此配置会为所有位于<code>src/main/jflex/</code> 以及其子目录下(<code>*.jflex</code>， <code>*.jlex</code>， <code>*.lex</code>，
+        <code>*.flex</code>)语法文件生成解析器的java代码。
+    </p>
+    <p>
+        生成的Java源代码的名称和包是语法中定义的。生成的Java源代码放置在<code>target/generated source/jflex</code>中，以及遵循Java包名称约定的子目录中。
+    </p>
+    <p>
+        更新<code>pom.xml</code>引入插件:
+    </p>
+    <pre><code>
+        &lt;project&gt;
+          &lt;!-- ... --&gt;
+          &lt;build&gt;
+            &lt;plugins&gt;
+              &lt;plugin&gt;
+                &lt;groupId&gt;de.jflex&lt;/groupId&gt;
+                &lt;artifactId&gt;jflex-maven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;1.9.1&lt;/version&gt;
+                &lt;executions&gt;
+                  &lt;execution&gt;
+                    &lt;goals&gt;
+                      &lt;goal&gt;generate&lt;/goal&gt;
+                    &lt;/goals&gt;
+                  &lt;/execution&gt;
+                &lt;/executions&gt;
+              &lt;/plugin&gt;
+            &lt;/plugins&gt;
+            &lt;!-- ... --&gt;
+          &lt;/build&gt;
+          &lt;!-- ... --&gt;
+        &lt;/project&gt;
+    </code></pre>
+    <h4 id="more-complex-configuration">更加复杂的配置</h4>
+    <p>
+        该示例为两个语法文件<code>src/main/lex/preprocessor.jflex</code>和<code>/pub/postprocessor.jflex</code>生成源代码，
+        就像其它位于<code>src/main/jflex</code>的语法文件(以及其子目录)。
+        生成的java源码会放置到<code>src/main/java</code>而不是<code>target/generated-sources/jflex</code>。
+    </p>
+    <pre><code>
+        &lt;plugin&gt;
+        &lt;groupId&gt;de.jflex&lt;/groupId&gt;
+        &lt;artifactId&gt;jflex-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;1.9.1&lt;/version&gt;
+        &lt;executions&gt;
+          &lt;execution&gt;
+            &lt;goals&gt;
+              &lt;goal&gt;generate&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;configuration&gt;
+              &lt;outputDirectory&gt;src/main/java&lt;/outputDirectory&gt;
+              &lt;lexDefinitions&gt;
+                &lt;lexDefinition&gt;src/main/jflex&lt;/lexDefinition&gt;
+                &lt;lexDefinition&gt;src/main/lex/preprocessor.jflex&lt;/lexDefinition&gt;
+                &lt;lexDefinition&gt;/pub/postprocessor.jflex&lt;/lexDefinition&gt;
+              &lt;/lexDefinitions&gt;
+            &lt;/configuration&gt;
+          &lt;/execution&gt;
+        &lt;/executions&gt;
+      &lt;/plugin&gt;</code></pre>
+    <h4 id="even-more-complex-configuration-using-several-executions">
+        更复杂的配置，使用多次执行
+    </h4>
+    <ul>
+        <li>
+            <p>
+                会为所有位于<code>src/main/lex/</code>的文件生成源代码， 使用严格的JLex兼容性，
+            </p>
+        </li>
+        <li>
+            <p>以及所有位于<code>src/main/jflex</code>的文件， 位于verbose模式下。</p>
+        </li>
+    </ul>
+    <pre><code>
+        &lt;plugin&gt;
+            &lt;groupId&gt;de.jflex&lt;/groupId&gt;
+            &lt;artifactId&gt;jflex-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;1.9.1&lt;/version&gt;
+            &lt;executions&gt;
+              &lt;execution&gt;
+                &lt;id&gt;strict jlex&lt;/id&gt;
+                &lt;goals&gt;
+                  &lt;goal&gt;generate&lt;/goal&gt;
+                &lt;/goals&gt;
+                &lt;configuration&gt;
+                  &lt;lexDefinitions&gt;
+                    &lt;lexDefinition&gt;src/main/lex&lt;/lexDefinition&gt;
+                  &lt;/lexDefinitions&gt;
+                  &lt;jlex&gt;true&lt;/jlex&gt;
+                &lt;/configuration&gt;
+              &lt;/execution&gt;
+              &lt;execution&gt;
+                &lt;id&gt;jflex&lt;/id&gt;
+                &lt;goals&gt;
+                  &lt;goal&gt;generate&lt;/goal&gt;
+                &lt;/goals&gt;
+                &lt;configuration&gt;
+                  &lt;lexDefinitions&gt;
+                    &lt;lexDefinition&gt;src/main/jflex&lt;/lexDefinition&gt;
+                  &lt;/lexDefinitions&gt;
+                  &lt;verbose&gt;true&lt;/verbose&gt;
+                &lt;/configuration&gt;
+              &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+    </code></pre>
+    <h3 id="more-information">更多信息</h3>
+    <ul>
+        <li><a href="https://jflex-de.github.io/jflex-web/jflex-maven-plugin/generate-mojo.html">jflex:生成</a>
+            有关jflex maven插件配置选项的更多信息。
+        </li>
+        <li>
+            <a href="http://maven.apache.org/pom.html#Plugins">插件POM参考指南</a>有关在项目中使用插件的更多信息。
+        </li>
+    </ul>
+
+    <h2 id="jflex-ant-task">JFlex Ant 任务</h2>
+    <p>
+        JFlex 很容易集成到<a href="http://ant.apache.org/">Ant</a> 构建工具。 为了在Ant中使用JFlex，
+        简单复制<code>lib/jflex-1.9.1.jar</code>文件到<code>$ANT_HOME/lib/</code>目录
+        或者显式设置路径<code>lib/jflex-1.9.1.jar</code>到任务定义 (查看下面示例)。
+    </p>
+    <p>JFlex Ant 任务在语法文件上调用JFlex。</p>
+    <p>
+        要使用JFlex任务，请在Ant构建文件中放置以下行：
+    </p>
+    <pre><code>
+        &lt;taskdef classname="jflex.anttask.JFlexTask" name="jflex" /&gt;
+    </code></pre>
+    <p>或者，显式设置JFlex jar的路径：</p>
+    <pre><code>
+        &lt;taskdef classname="jflex.anttask.JFlexTask" name="jflex"
+         classpath="path-to-jflex.jar" /&gt;
+    </code></pre>
+    <p>
+        JFlex任务要求将<code>file</code>属性设置为源语法文件(<code>*.flex</code>)。
+        除非使用<code>destdir</code>选项指定目标目录，否则生成的类将保存到语法文件所在的同一目录中。
+        与<code>javac</code>一样，JFlex任务根据生成的类包在<code>destdir</code>中创建子目录。
+    </p>
+    <p>
+        此任务仅在语法文件比生成的文件新时调用JFlex。
+    </p>
+    <h3 id="parameters">参数</h3>
+    <p>
+        以下属性可用于调用JFlex任务。
+    </p>
+    <ul>
+        <li>
+            <p>
+                <code>file="file"</code><br>
+                要处理的语法文件。此属性是必需的。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>destdir="dir"</code><br>
+                指定生成文件所在的目录。如果未设置，则文件将写入包含语法文件的目录。请注意，与JFlex的<code>-d</code>命令行选项不同，
+                <code>destdir</code>会将生成的文件写入<code>{destdir}/</code><strong><code>{packagename}</code></strong>。
+                此行为类似于`javac-d-dir。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>outdir="dir"</code><br>
+                指定生成文件所在的目录。如果未设置，则文件将写入包含语法文件的目录。
+                此选项的工作原理与JFlex的<code>-d</code>命令行选项完全相同，它会导致输出文件被写入<code>dir</code>，而不管包名如何。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>verbose</code> (默认 <code>"关闭"</code>)<br>
+                显示生成过程消息。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>encoding</code>（如果未设置，则使用JVM默认编码）<br>读取lexer规范和编写java文件时使用的字符编码
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>dump</code> (默认 <code>"关闭"</code>)<br>
+                转储字符类、NFA和DFA表。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>time</code> 或者 <code>timeStatistics</code> (默认<code>"关闭"</code>)<br>
+                显示生成时间统计。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>nomin</code> 或者 <code>skipMinimization</code> (默认<code>"关闭"</code>)<br>
+                跳过DFA最小化步骤。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>skel="file"</code> 或者 <code>skeleton="file"</code><br>
+                使用UTF-8编码的外部骨架文件。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>dot</code> 或者 <code>generateDot</code> (默认<code>"关闭"</code>)<br>
+                为生成的自动机编写graphviz<code>.dot</code>文件。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>nobak</code> (默认 <code>"关闭"</code>)<br>
+                如果生成的文件存在，则不要进行备份。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>jlex</code> (默认 <code>"关闭"</code>)<br>
+                使用JLex兼容模式。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>legacydot</code> (默认 <code>"关闭"</code>)<br>
+                点<code>.</code>元字符匹配<code>[^\n]</code>
+                而不是<br><code>[^\n\r\u000B\u000C\u0085\u2028\u2029]</code>
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>unusedwarning</code> (默认 <code>"关闭"</code>)<br>
+                警告lexer规范中未使用的宏定义。
+            </p>
+        </li>
+    </ul>
+    <h3 id="example1">示例</h3>
+    <p>
+        在任务定义之后，<code>&lt;jflex ..&gt;</code>任务在Ant中可用。例如：
+    </p>
+    <pre><code>
+        &lt;jflexfile="src/parser/Parser.flex"destdir="build/generated/"/&gt;
+    </code></pre>
+    <p>
+        JFlex为<code>src/paparser/scanner.flex</code>生成扫描器，
+        并将结果保存到<code>build/generate/paparser/</code>，提供声明在<code>parser</code>包中<code>scanner.flex</code>。
+    </p>
+    <pre><code>
+        &lt;jflex file="src/parser/Scanner.flex"destdir="build/generated/" /&gt;
+         &lt;javac
+             srcdir="build/generated/"
+             destdir="build/classes/"
+         /&gt;
+    </code></pre>
+    <p>
+        与上述相同，并将生成的类编译到<code>build/classes</code>
+    </p>
+    <h1 id="Example">一个简单的例子：如何使用JFlex</h1>
+    <p>
+        为了演示JFlex的词法规范是什么样子的，本节介绍了Java语言规范的一部分。
+    </p>
+    <p>
+        这个例子并没有描述Java程序的整个词法结构，而只是其中一小部分：-一些关键字，-一些运算符，-注释-以及只有两种字面量。
+    </p>
+    <p>
+        它还展示了如何与LALR解析器生成器CUP（Hudson 1996）交互，因此使用了一个类<code>sym</code>（由CUP生成），其中声明了CUP语法的终端标记的整数常量。
+    </p>
+    <p>
+        该示例位于<code>examples/cup-java-minijava</code>。
+    </p>
+    <p>
+        <code>examples/cup-java</code>目录还包含java程序词法结构的<em>完整</em>JFlex规范，
+        以及C.Scott Ananian的java cup解析器规范，该规范从cup（Hudson 1996）网站获得（已修改得以和JFlex扫描器交互）。
+        这两个规范都遵循Java语言规范（Gosling、Joy和Steele 1996）。
+    </p>
+    <p>
+        在<code>examples/standalone</code>中，您可以找到一个小型的独立扫描器，它不需要其他依赖项或CUP等工具来为您提供工作代码。
+    </p>
+    <pre><code>
+        /* JFlex 示例: 部分Java语言词法分析器规范 */
+        import java_cup.runtime.*;
+
+        /**
+         * 这个类是一个简单的词法分析器示例。
+         */
+        %%
+
+        %class Lexer
+        %unicode
+        %cup
+        %line
+        %column
+
+        %{
+          StringBuffer string = new StringBuffer();
+
+          private Symbol symbol(int type) {
+            return new Symbol(type, yyline, yycolumn);
+          }
+          private Symbol symbol(int type, Object value) {
+            return new Symbol(type, yyline, yycolumn, value);
+          }
+        %}
+
+        LineTerminator = \r|\n|\r\n
+        InputCharacter = [^\r\n]
+        WhiteSpace     = {LineTerminator} | [ \t\f]
+
+        /* 注释 */
+        Comment = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
+
+        TraditionalComment   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
+        // 注释可以是文件的最后一行，没有行终止符。
+        EndOfLineComment     = "//" {InputCharacter}* {LineTerminator}?
+        DocumentationComment = "/**" {CommentContent} "*"+ "/"
+        CommentContent       = ( [^*] | \*+ [^/*] )*
+
+        Identifier = [:jletter:] [:jletterdigit:]*
+
+        DecIntegerLiteral = 0 | [1-9][0-9]*
+
+        %state STRING
+
+        %%
+
+        /* 关键字 */
+        &lt;YYINITIAL&gt; "abstract"           { return symbol(sym.ABSTRACT); }
+        &lt;YYINITIAL&gt; "boolean"            { return symbol(sym.BOOLEAN); }
+        &lt;YYINITIAL&gt; "break"              { return symbol(sym.BREAK); }
+
+        &lt;YYINITIAL&gt; {
+          /* 标识符 */
+          {Identifier}                   { return symbol(sym.IDENTIFIER); }
+
+          /* 字面量 */
+          {DecIntegerLiteral}            { return symbol(sym.INTEGER_LITERAL); }
+          \"                             { string.setLength(0); yybegin(STRING); }
+
+          /* 操作符 */
+          "="                            { return symbol(sym.EQ); }
+          "=="                           { return symbol(sym.EQEQ); }
+          "+"                            { return symbol(sym.PLUS); }
+
+          /* 注释 */
+          {Comment}                      { /* ignore */ }
+
+          /* 空白 */
+          {WhiteSpace}                   { /* ignore */ }
+        }
+
+        &lt;STRING&gt; {
+          \"                             { yybegin(YYINITIAL);
+                                           return symbol(sym.STRING_LITERAL,
+                                           string.toString()); }
+          [^\n\r\"\\]+                   { string.append( yytext() ); }
+          \\t                            { string.append('\t'); }
+          \\n                            { string.append('\n'); }
+
+          \\r                            { string.append('\r'); }
+          \\\"                           { string.append('\"'); }
+          \\                             { string.append('\\'); }
+        }
+
+        /* 错误回退 */
+        [^]                              { throw new Error("Illegal character &lt;"+yytext()+"&gt;"); }
+    </code></pre>
+    <p>
+        根据此规范，JFlex生成一个<code>.java</code>文件，其中包含一个类，类里面是扫描器的代码。
+        有一个构造方法，从<code>java.io.Reader</code>中读取输入。
+        还将有一个方法<code>yylex()</code>，用于运行扫描器，
+        并可用于从输入中获取下一个令牌（在本例中，该方法实际上名为<code>next_token()</code>，因为规范使用了<code>%cup</code>开关）。
+    </p>
+    <p>
+        与JLex一样，该规范由三部分组成，按<code>%%</code>划分：
+    </p>
+    <ul>
+        <li><a href="#ExampleUserCode">用户代码</a>；</li>
+        <li><a href="#ExampleOptions">选项和宏</a>；</li>
+        <li><a href="#ExampleLexRules">词法规则</a>。</li>
+    </ul>
+    <h2 id="ExampleUserCode">要包含的代码</h2>
+    <p>
+        让我们来看看第一部分，<em>用户代码</em>：以<code>%%</code>开头的第一行文本被逐字复制到生成的词法分析器类的顶部（在实际的类声明之前）。
+        除了<code>package</code>和<code>import</code>语句之外，这里通常没有太多工作要做。
+        如果代码以<code>javadoc</code>类注释结束，则生成的类将获得此注释，否则JFlex将自动生成一个注释。
+    </p>
+    <h2 id="ExampleOptions">选项和宏</h2>
+    <p>
+        第二部分<em>选项和声明</em>更有趣。它由一组选项、生成的scanner类中包含的代码、词法状态和宏声明组成。
+        每个JFlex选项都必须以规范的单独一行，并以<code>%</code>开头。在我们的示例中，使用了以下选项：
+    </p>
+    <ul>
+        <li>
+            <p>
+                <code>%class
+                    Lexer</code>告诉JFlex将生成的类命名为<code>Lexer</code>，并将代码写入文件<code>Lexer.java</code>。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%unicode</code>定义了扫描器将处理的字符集。对于扫描文本文件，应始终使用<code>%unicode</code>。
+                可以指定Unicode版本，例如<code>%unicode 4.1</code>。
+                如果没有指定版本，将使用最新支持的Unicode版本——在JFlex 1.9.1中，这是Unicode 12.1。
+                另请参阅<a href="#sec:encodings">编码</a>，了解有关字符集、编码和扫描文本与二进制文件的更多信息。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%cup</code>切换到cup兼容模式，以与cup生成的解析器交互
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%line</code>开启行计数（当前行号可以通过变量<code>yyline</code>访问）
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%column</code>开启列计数（当前列通过<code>yycolumn</code>访问）
+        </li>
+    </ul>
+    <p>
+        <code>%{</code>和<code>%}</code>之间的代码被逐字复制到生成的lexer类源代码中。
+        在这里，您可以声明在扫描器操作中使用的成员变量和方法。
+        在我们的示例中，我们声明了一个<code>StringBuffer</code><code>string</code>，
+        我们将在其中存储部分字符串文字和两个创建<code>java_cup.runtime.Symbol</code>对象的辅助方法<code>symbol</code>。
+        在Symbol对象中，包含当前令牌的位置信息（关于如何与解析器生成器CUP交互，请参见<a href="#CUPWork">JFlex 和 CUP</a>）。
+        与所有JFlex选项一样，<code>%{</code>和<code>%}</code>都必须以单独一行开头。
+    </p>
+    <p>
+        规范继续使用宏声明。宏是正则表达式的缩写，用于使词法规范更容易阅读和理解。宏声明由宏标识符、<code>=</code>和它所表示的正则表达式组成。
+        此正则表达式本身可能包含宏用法。虽然这允许类似语法的规范风格，但宏仍然只是缩写，而不是非终结符——它们不能是递归的。
+        JFlex在生成时检测并报告宏定义中的循环。
+    </p>
+    <p>以下是一些更详细的宏示例：</p>
+    <ul>
+        <li>
+            <p>
+                <code>LineTerminator</code>表示匹配一个ASCII <code>CR</code>、一个 ASCII <code>LF</code>
+                或者一个<code>CR</code>后面跟着<code>LF</code>的正则表达式。
+            </p>
+        </li>
+        <li>
+            <p><code>InputCharacter</code> 表示匹配所有不是<code>CR</code>或者<code>LF</code>的一个字符。</p>
+        </li>
+        <li>
+            <p>
+                <code>TraditionalComment</code>匹配字符串<code>/*</code>后面跟着非<code>*</code>的字符串，
+                但是以<code>*/</code>结尾的表达式。
+                这不会匹配像<code>/****/</code>， 我们添加<code>/*</code>，
+                后跟任意数量（至少一个）的<code>*</code>，后跟结束<code>/</code>。
+                这不是匹配非嵌套Java注释的唯一表达式，而是其中一个更简单的表达式。
+                人们很容易写出类似于表达式<code>/* .* */</code>，
+                但是这会匹配到比我们预想的更多。例如，它将匹配整个输入<code>/* */ x = 0; /* */</code>，
+                而不是两条评论和四个真正的令牌。请参阅宏<code>文档注释</code>和<code>注释内容</code>以获取替代方案。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>CommentContent</code>匹配零个或多个字符，但<code>*</code>或任何数量的<code>*</code>后面跟一个不是<code>/</code>的字符除外
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>Identifier</code>匹配每个以<code>jletter</code>字符类开头，后跟零个或多个<code>jletterdigit</code>字符类。
+                <code>jletter</code>和<code>jletterdigit</code>是预定义的字符类。
+                <code>jletter</code>包含Java方法<code>Character.isJavaIdentifierStart</code>返回<code>true</code>的所有字符。
+                <code>jletterdigit</code>则是<code>Character.isJavaIdentifierPart</code>返回<code>true</code>的所有字符。
+            </p>
+        </li>
+    </ul>
+    <p>
+        词法规范第二部分的最后一部分是词法状态声明：<code>state STRING</code>声明了一个词法状态<code>STRING</code>，
+        可以在规范的部分<em>词法规则</em>中使用。状态声明是一行，以<code>%state</code>开头，后跟空格或逗号分隔的状态标识符列表。
+        可以有多行以<code>%state</code>开头的。
+    </p>
+    <h2 id="ExampleLexRules">规则和动作</h2>
+    <p>
+        JFlex规范的<em>词法规则</em>部分包含正则表达式和操作（Java代码），当扫描器与相关正则表达式匹配时执行。
+        当扫描器读取其输入时，它会跟踪所有正则表达式，并激活最长匹配的表达式的动作。
+        例如，我们上面的规范会将输入<code>breaker</code>匹配<code>Identifier</code>的正则表达式，
+        而不是关键字<code>break</code>跟着后面的标识符<code>er</code>，
+        因为规则<code>{Identifier}</code>一次匹配的输入比规范中的任何其他规则都多。
+        如果两个正则表达式对某个输入都有最长的匹配，则扫描器会选择规范中首先出现的表达式的动作。
+        这样，我们就得出对于输入<code>break</code>，会匹配关键字<code>break</code>，而不是标识符<code>break</code>。
+    </p>
+    <p>
+        除了正则表达式匹配之外，还可以使用词法状态来细化规范。词法状态就像一个开始条件。
+        如果扫描器处于词法状态<code>STRING</code>，则只有开头条件<code>&lt;STRING&gt;</code>可以匹配。
+        正则表达式的开始条件可以包含多个词法状态。然后，当词法分析器处于这些词法状态中的任何一个时，它就会被匹配。
+        词法状态<code>YYINITIAL</code>是预定义的，也是词法分析器开始扫描的状态。
+        如果正则表达式没有开始条件，它将在<em>所有</em>的词法状态中匹配。
+    </p>
+    <p>
+        由于经常有具有相同起始条件的表达式集，因此可以对它们进行分组：
+    </p>
+    <pre><code>
+        &lt;STRING&gt; {
+          expr1   { action1 }
+          expr2   { action2 }
+        }
+    </code></pre>
+    <p>
+        意味着<code>expr1</code>和<code>expr2</code>均有起始条件<code>&lt;STRING&gt;</code>。
+    </p>
+    <p>
+        我们示例中的前三条规则演示了以起始条件<code>&lt;YYINITIAL&gt;</code>开头的正则表达式的语法。
+    </p>
+    <pre><code>
+        &lt;YYINITIAL&gt; "abstract"           { return symbol(sym.ABSTRACT); }
+    </code></pre>
+    <p>
+        当扫描器处于启动状态时，才匹配输入<code>abstract</code>。
+        当字符串<code>abstract</code>匹配时，scanner方法返回CUP符号<code>sym.ABSTRACT</code>。
+        如果某个操作没有返回值，则在执行该操作后立即恢复扫描过程。
+    </p>
+    <p>规则由以下围住</p>
+    <pre><code>
+        &lt;YYINITIAL&gt; { ...
+    </code></pre>
+    <p>
+        演示缩写语法，并且仅在状态<code>YYINITIAL</code>中匹配。
+    </p>
+    <p>在这些规则中，有一条特别有趣：</p>
+    <pre><code>
+        \"  { string.setLength(0); yybegin(STRING); }
+    </code></pre>
+    <p>
+        如果扫描器匹配状态<code>YYINITIAL</code>中的双引号，我们就识别出了字符串字面量的开头。
+        因此，我们清除了将保存此字符串文字内容的<code>StringBuffer</code>，
+        并告诉带有<code>yybegin(STRING)</code>的扫描器切换到词法状态<code>STRING</code>。
+        因为我们还没有向解析器返回值，所以我们的扫描器会马上处理。
+    </p>
+    <p>
+        在词法状态<code>STRING</code>中，另一个规则演示了如何引用已匹配的输入：
+    </p>
+    <pre><code>
+        [^\n\r\"\\]+                   { string.append( yytext() ); }
+    </code></pre>
+    <p>
+        表达式<code>[^\n\r\"\\]+</code> 匹配输入中的所有字符，直到遇到下一个反斜杠（表示转义序列，如<code>\n</code>），
+        双引号（表示字符串的结尾），或行终止符（不能出现在Java字符串字面量中）。
+        输入的匹配区域可由<code>yytext()</code>引用，并附加到目前为止解析的字符串字面量的内容中。
+    </p>
+    <p>
+        示例规范中的最后一个词法规则用作错误回退。它匹配任何状态中未被其他规则匹配的任何字符。
+        它不会与任何其他规则冲突，因为它的优先级最低（因为它是最后一个规则），而且它只匹配一个字符（所以它不会比任何其他规则更具有最长的匹配优先级）。
+    </p>
+    <h2 id="how-to-get-it-building">如何构建</h2>
+    <ul>
+        <li>
+            <p><a href="#Installing">安装JFlex。</a></p>
+        </li>
+        <li>
+            <p>
+                如果您已经编写了规范文件（或从<code>examples</code>目录中选择了一个），请将其保存（例如存为<code>java-lang.flex</code>）。
+            </p>
+        </li>
+        <li>
+            <p>使用以下命令运行JFlex</p>
+            <p><code>jflex java-lang.flex</code>。</p>
+        </li>
+        <li>
+            <p>
+                JFlex接着应显示有关生成扫描器的进度消息，并将生成的代码写入规范文件的目录。
+            </p>
+        </li>
+        <li>
+            <p>
+                编译生成的<code>.java</code>文件和您自己的类（如果使用CUP，请先生成解析器类）。
+            </p>
+        </li>
+        <li>
+            <p>就这么多。</p>
+        </li>
+    </ul>
+    <!--
+  Copyright 2023, Gerwin Klein, Régis Décamps, Steve Rowe
+  SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+    <h1 id="Specifications">词法规范</h1>
+    <p>
+        如上所示，JFlex的词法规范文件由三个部分组成，以<code>%%</code>开头的一行分隔：
+    </p>
+    <pre><code>
+        用户代码
+        %%
+        选项和声明
+        %%
+        词法规则
+    </code></pre>
+    <p>
+        在规范的所有部分中，允许使用<code>/*comment text*/</code>形式的注释和以<code>//</code>开头的Java风格的行尾注释。
+        JFlex注释可以嵌套，因此<code>/*</code>和<code>*/</code>的数量应该保持平衡。
+    </p>
+    <h2 id="user-code">用户代码</h2>
+    <p>
+        第一部分包含在scanner类声明之前的用户代码会逐字复制到生成的源文件开头。
+        如示例规范所示，这里是放置<code>package</code>声明和<code>import</code>语句的地方。
+        将辅助类（如令牌类）放入本节中是可能的，但并不被认为是好的Java风格；
+        它们通常最好在自己的<code>.java</code>文件中声明。
+    </p>
+    <h2 id="options-and-declarations">选项和声明</h2>
+    <p>
+        词法规范的第二部分包含定制生成词法器的选项和指令，<a href="#StateDecl">词法器状态</a>声明和<a href="#MacroDefs">宏定义</a>。
+    </p>
+    <p>
+        每个JFlex指令必须位于行首，并以<code>%</code>字符开头。具有一个或多个参数的指令描述如下。
+    </p>
+    <pre><code>
+        %class "classname"
+    </code></pre>
+    <p>
+        表示您以<code>%class</code>开头，后跟空格，后跟生成的扫描器的类名（双引号是多余的，另请参阅<a
+            href="#Example">示例规范</a>）。
+    </p>
+    <h3 id="ClassOptions">类选项和用户类代码</h3>
+    <p>
+        这些选项涉及名称、构造方法、API和生成的扫描器类的相关部分。
+    </p>
+    <ul>
+        <li>
+            <p><code>%class "classname"</code></p>
+            <p>
+                告诉JFlex将生成的类命名为<code>classname</code>，并将生成的代码写入文件<code>classname.java</code>。
+                如果没有使用<code>-d &lt;directory&gt;</code>命令行选项，代码将被写入规范文件所在的目录。
+                如果规范中没有<code>%class</code>指令，则生成的类将获得名称<code>Yylex</code>，
+                并将写入文件<code>Yylex.java</code>。规范中应该只有一个<code>%class</code>指令。
+            </p>
+        </li>
+        <li>
+            <p><code>%implements "interface 1"[, "interface 2", ..]</code></p>
+            <p>
+                使生成的lexer类实现指定的接口。如果存在多个<code>%implements</code>指令，则将实现所有指定的接口。
+            </p>
+        </li>
+        <li>
+            <p><code>%extends "classname"</code></p>
+            <p>
+                使生成的类成为<code>classname</code>的子类。规范中应该只有一个<code>%extends</code>指令。
+            </p>
+        </li>
+        <li>
+            <p><code>%public</code></p>
+            <p>
+                使生成的类是public（默认情况下，该类只能在其自己的包中访问）。
+            </p>
+        </li>
+        <li>
+            <p><code>%final</code></p>
+            <p>使生成的类是final。</p>
+        </li>
+        <li>
+            <p><code>%abstract</code></p>
+            <p>使生成的类是abstract。</p>
+        </li>
+        <li>
+            <p><code>%no_suppress_warnings</code></p>
+            <p>
+                不要为生成的类添加任何<code>@SuppressWarnings(...)</code>注解。
+                这意味着，您可以在类前添加自己的<code>@SuppressWarnings(...)</code>注释，而不会出现因为重复注解导致的编译器错误。
+            </p>
+        </li>
+        <li>
+            <p><code>%apiprivate</code></p>
+            <p>
+                将类所有生成的方法和字段设置为私有。
+                例外情况是构造方法、规范中的用户代码，以及如果存在<code>%cup</code>，则还有方法<code>next_token</code>。
+                骨架文件中所有出现的<code>public</code>（<code>public</code>前后各一个空格字符）
+                都会被<code>private</code>替换（即使使用了用户指定的骨架）。对生成类的访问预计将由用户类代码介导（请参阅下一个开关）。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%{</code><br>
+                <code>...</code><br>
+                <code>%}</code>
+            </p>
+            <p>
+                <code>%{</code>和<code>%}</code>中包含的代码被逐字复制到生成的类中。
+                在这里，您可以在生成的扫描器中定义自己的成员变量和方法。
+                与所有选项一样，<code>%{</code>和<code>%}</code>都必须在规范中以一行开头。
+                如果存在多个类代码指令<code>%｛...%｝</code>，则代码将按照规范中出现的顺序连接起来。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%init{</code><br>
+                <code>...</code><br>
+                <code>%init}</code>
+            </p>
+            <p>
+                <code>%init{</code>和<code>%init}</code>中包含的代码被逐字复制到生成类的构造方法中。
+                在这里，可以初始化<code>%｛...%｝</code>指令中声明的成员变量。如果存在多个初始化器选项，则代码将按照规范中的出现顺序连接起来。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%initthrow{</code><br>
+                <code>"exception1"[, "exception2", ...]</code><br>
+                <code>%initthrow}</code>
+            </p>
+            <p>或者仅仅(在单独一行)</p>
+            <p>
+                <code>%initthrow "exception1" [, "exception2", ...]</code>
+            </p>
+            <p>
+                指定在构造方法的<code>throws</code>子句中声明指定的异常。
+                如果规范中存在多个<code>%initthrow{</code><code>...</code><code>%initthrow}</code>指令，则将声明所有指定的异常。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%ctorarg "type" "ident"</code>
+            </p>
+            <p>
+                将指定的参数添加到生成的扫描器的构造方法中。如果存在多个这样的指令，则按照规范中出现的顺序添加参数。
+                请注意，此选项与<code>%standalone</code>和<code>%debug</code>指令冲突，
+                因为在生成的<code>main</code>方法中，无法自动为这些参数创建合理的默认值。
+                在这种情况下，JFlex将发出警告，并生成一个没有这些参数且没有用户初始化代码（可能引用这些参数）的额外默认构造方法。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%scanerror "exception"</code>
+            </p>
+            <p>
+                在发生内部错误时，使生成的扫描器抛出指定异常的实例(默认值为<code>java.lang.Error</code>)。
+                请注意，此异常仅适用于内部扫描器错误。对于通常的规范，它不应该发生（即，如果规范中有错误回退规则，并且只使用有文档记录的扫描器API）。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%buffer "size"</code>
+            </p>
+            <p>
+                将扫描缓冲区的初始大小设置为指定值（十进制，以字节为单位）。 默认值为16384。
+                缓冲区将设置为<code>%token_size_limit</code>（如果提供）和<code>%buffer</code>的最小值。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%token_size_limit "size"</code>
+            </p>
+            <p>
+                将扫描缓冲区的最大大小设置为Java数字（十进制、八进制或十六进制）或限定标识符提供的指定大小。
+                如果作为标识符提供，标识符可以引用静态常量或字段，这些常量或字段可以在运行时在用户类代码中修改。
+                设置<code>%token_size_limit ZZ_BUFFERSIZE</code>将扫描缓冲区限制为其初始大小。
+            </p>
+            <p>
+                限制令牌大小会引入错误情况：当扫描器遇到不符合最大缓冲区大小的令牌时，它将抛出<code>java.io.EOFException</code>。
+                小于最大缓冲区大小的令牌能保证匹配。并不是说最长的匹配规则适用，
+                即<code>a*</code>将在包含太长<code>a</code>序列的输入上导致<code>EOFException</code>，即使可以进行较少的匹配。
+            </p>
+            <p>
+                该限制用于在解析不受信任的输入时需要内存限制的应用程序。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%include "filename"</code>
+            </p>
+            <p>
+                用指定文件逐字替换<code>%include</code>。
+            </p>
+        </li>
+    </ul>
+    <h3 id="scanning-method">扫描方法</h3>
+    <p>
+        本节展示了如何定制扫描方法。您可以重新定义方法的名称和返回类型，并且可以声明可能在规范的某个操作中抛出的异常。
+        如果没有指定返回类型，则扫描方法将被声明为类<code>Yytoken</code>的返回值。
+    </p>
+    <ul>
+        <li>
+            <p>
+                <code>%function "name"</code>
+            </p>
+            <p>
+                指定扫描方法的名称。如果规范中不存在<code>%function</code>指令，扫描方法会获得<code>yylex</code>的名称。
+                此指令覆盖了<code>%cup</code>开关的设置。带有<code>%cup</code>开关的扫描方法的默认名称是<code>next_token</code>。
+                覆盖此名称可能会导致生成的扫描器隐式声明为<code>abstract</code>，
+                因为它没有提供<code>java_cup.runtime.Scanner</code>接口的<code>next_token</code>的方法。
+                当然，如果你仍然想重写方法名，可以在类代码部分提供该方法的虚拟实现。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%integer</code><br>
+                <code>%int</code>
+            </p>
+            <p>
+                两者都会导致扫描方法被声明为返回Java类型<code>int</code>。
+                规范中的操作可以返回<code>int</code>值作为标记。
+                此设置下的默认文件结束值是<code>YYEOF</code>，它是生成类的<code>public static final int</code>的成员。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%intwrap</code>
+            </p>
+            <p>
+                使扫描方法声明为Java包装器类型<code>Integer</code>。
+                规范中的操作可以返回<code>Integer</code>值作为标记。
+                此设置下的默认文件结尾值为<code>null</code>。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%type "typename"</code>
+            </p>
+            <p>
+                使扫描方法被声明为返回指定类型。规范中的操作可以返回<code>typename</code>的值作为标记。
+                此设置下的默认文件结尾值为<code>null</code>。
+                如果<code>typename</code>不是<code>java.lang.Object</code>的子类，
+                你应该使用<code>%eofval{</code><code>...</code><code>%eofval}</code>指令
+                或者<a href="#Grammar"><code>&lt;&lt;EOF&gt;&gt;</code>规则</a>指定另外的文件结束符。
+                <code>%type</code>指令覆盖了<code>%cup</code>开关的设置。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%yylexthrow{</code><br>
+                <code>"exception1" [, "exception2", ... ]</code><br>
+                <code>%yylexthrow}</code>
+            </p>
+            <p>或者放在单独一行</p>
+            <p>
+                <code>%yylexthrow "exception1" [, "exception2", ...]</code>
+            </p>
+            <p>
+                位于列表<code>%yylexthrow{</code><code>...</code> <code>%yylexthrow}</code>中的异常会被声明到扫描方法的throws里。
+                如果规范中有多个<code>%yylexthrow{</code> <code>...</code> <code>%yylexthrow}</code>，所有指定的异常都会被声明
+            </p>
+        </li>
+    </ul>
+    <h3 id="the-end-of-file">文件结尾</h3>
+    <p>
+        总是有一个默认值，当到达文件末尾时，扫描方法将返回该值。但是，您可以定义一个要返回的特定值，以及在到达文件末尾时应执行的特定代码。
+    </p>
+    <p>
+        默认的文件结尾值取决于扫描方法的返回类型：
+    </p>
+    <ul>
+        <li>
+            <p>
+                对于<code>%integer</code>， 扫描方法将会返回<code>YYEOF</code>，
+                这是一个生成类中的<code>public static final int</code>成员。
+            </p>
+        </li>
+        <li>
+            <p>对于<code>%intwrap</code>，</p>
+        </li>
+        <li>
+            <p>根本没有指定类型，或</p>
+        </li>
+        <li>
+            <p>
+                对于使用<code>%type</code>声明的用户定义类型，其值为<code>null</code>。
+            </p>
+        </li>
+        <li>
+            <p>
+                在CUP兼容模式下，使用<code>%cup</code>，值为
+            <p>
+                <code>new java_cup.runtime.Symbol(sym.EOF)</code>
+            </p>
+        </li>
+    </ul>
+    <p>
+        可以使用以下指令定义要在文件末尾执行的用户值和代码：
+    </p>
+    <ul>
+        <li>
+            <p>
+                <code>%eofval{</code><br>
+                <code>...</code><br>
+                <code>%eofval}</code>
+            </p>
+            <p>
+                位于<code>%eofval{</code><code>...</code><code>%eofval}</code>之间的代码将逐字复制到扫描方法中，
+                然后在<em>每次</em>到达文件结尾时被执行(当到达文件末尾后再次调用扫描方法时，可能会多次调用)。代码应向解析器返回表示文件结束的值。
+                规范中应该只有一个<code>%eofval{</code> <code>...</code> <code>%eofval}</code>。
+                <code>%eofval{ ...%eofval}</code>指令覆盖了<code>%cup</code>和<code>%byaccj</code>下的开关配置。
+                还有一种更易读的替代方法，可以使用<a href="#Grammar"><code>&lt;&lt;EOF&gt;&gt;</code>规则</a>。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%eof{</code><br>
+                <code>...</code><br>
+                <code>%eof}</code>
+            </p>
+            <p>
+                位于<code>%{eof ... %eof}</code>的代码在到达文件结尾时会被精确执行一次。
+                位于方法<code>void yy_do_eof()</code>里的代码不应该返回任何值。
+                (应该使用<code>%eofval{...%eofval}</code>或者<code>&lt;&lt;EOF&gt;&gt;</code>)。
+                如果存在多个文件结尾代码指令，则代码将按照规范中的出现顺序连接。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%eofthrow{</code><br>
+                <code>"exception1" [,"exception2", ... ]</code><br>
+                <code>%eofthrow}</code>
+            </p>
+            <p>或者，在一行上：</p>
+            <p>
+                <code>%eofthrow "exception1" [, "exception2", ...]</code>
+            </p>
+            <p>
+                <code>%eofthrow{…%eofthrow}</code>中列出的异常将在方法<code>yy_do_eof()</code>的throws子句中声明。
+                如果规范中有多个<code>%eofthrow{...%eofthrow}</code>子句，则将声明所有指定的异常。
+            </p>
+        </li>
+        <li>
+            <p><code>%eofclose</code></p>
+            <p>
+                使JFlex在文件末尾关闭输入流。
+                代码<code>yyclose()</code>附加到方法<code>yy_do_eof()</code>（与<code>%eof{...%eof}</code>%中指定的代码一起），
+                异常<code>java.io.IOException</code>在该方法的throws子句中声明（与<code>%eofthrow{...%oefthrow}</code>一起）
+            </p>
+        </li>
+        <li>
+            <p><code>%eofclose false</code></p>
+            <p>
+                再次关闭<code>%eofclose</code>的效果（例如，在<code>%cup</code>之后不希望关闭输入流的情况下）。
+            </p>
+        </li>
+    </ul>
+    <h3 id="standalone-scanners">独立扫描器</h3>
+    <ul>
+        <li>
+            <p><code>%debug</code></p>
+            <p>
+                在生成的类中创建一个主方法，该方法需要命令行上的输入文件名，然后在此输入文件上执行扫描器，
+                将每个返回令牌的信息打印到Java控制台，直到到达文件末尾。
+                信息包括：行号（如果启用行计数）、列（如果启用列计数）、匹配的文本和执行的操作（规范中有行号）。
+            </p>
+        </li>
+        <li>
+            <p><code>%standalone</code></p>
+            <p>
+                在生成的类中创建一个主方法，该方法需要命令行上的输入文件名，然后在此输入文件上执行扫描器。
+                扫描器返回的值将被忽略，但任何不匹配的文本都会打印到Java控制台。
+                为了避免使用额外的令牌类，扫描方法将被声明为具有默认类型<code>int</code>，
+                而不是<code>YYtoken</code>（如果没有明确指定任何其他类型）。
+                在大多数情况下，这无关紧要，但在出于某种目的独立制作另一个扫描器时，了解这一点可能很有用。
+                如果你只想在不连接解析器进行测试等的情况下运行扫描器，你应该考虑使用<code>%debug</code>指令。
+            </p>
+        </li>
+    </ul>
+    <h3 id="cup-compatibility">CUP 兼容性</h3>
+    <p>
+        如果您对如何将生成的扫描器与CUP进行交互操作感兴趣，则可能还需要阅读<a href="#CUPWork">CUP部分</a>。
+    </p>
+    <ul>
+        <li>
+            <p>
+                <code>%cup</code>
+            </p>
+            <p>
+                <code>%cup</code>指令启用CUP兼容模式，其等同于以下指令集：
+            </p>
+            <pre><code>
+                %implements java_cup.runtime.Scanner
+                %function next_token
+                %type java_cup.runtime.Symbol
+                %eofval{
+                  return new java_cup.runtime.Symbol(&lt;CUPSYM&gt;.EOF);
+                %eofval}
+                %eofclose
+            </code></pre>
+            <p>
+                <code>&lt;CUPSYM&gt;</code>的值默认为symand，可以通过%cupsym指令进行更改。
+                在JLex兼容模式（命令行上的--jlex开关）下，%eofclose不会打开。
+            </p>
+        </li>
+        <li>
+            <p><code>%cup2</code></p>
+            <p>
+                <code>%cup2</code>指令类似于CUP模式，只是针对TU Munich的CUP2生成器，
+                位于<a href="http://www2.in.tum.de/cup2" class="uri">http://www2.in.tum.de/cup2</a>。它执行以下操作：
+            </p>
+            <ul>
+                <li>添加CUP2包导入声明</li>
+                <li>实现CUP2扫描器接口</li>
+                <li>打开行和列计数开关</li>
+                <li>将扫描器功能设置为<code>readNextTerminal</code></li>
+                <li>将标记类型设置为<code>ScannerToken&lt;? extends Object&gt;</code></li>
+                <li>在文件末尾返回特殊CUP2 EOF标记</li>
+                <li>打开unicode</li>
+            </ul>
+        </li>
+        <li>
+            <p>
+                <code>%cupsym "classname"</code>
+            </p>
+            <p>
+                自定义包含终端标记名称的生成的CUP类/接口的名称。 默认为<code>sym</code>。
+                该指令不应在<code>%cup</code>之后使用，而应放在其之前。
+                <!-- FIXME: check if this can be relaxed -->
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%cupdebug</code>
+            </p>
+            <p>
+                在生成的类中创建一个主方法，该方法期望命令行上的输入文件名称，然后在该输入文件上执行扫描器。
+                将每个返回的标记的行、列、匹配文本和CUP符号名称打印到标准输出。
+            </p>
+        </li>
+    </ul>
+    <h3 id="byaccj-compatibility">BYacc/J 兼容性</h3>
+    <p>
+        如果您对如何将生成的扫描器与Byacc/J交互，您可能还想阅读<a href="#BYaccJ">JFlex 和 BYacc/J</a>。
+    </p>
+    <ul>
+        <li>
+            <p>
+                <code>%byaccj</code>
+            </p>
+            <p>
+                <code>%byaccj</code>指令启用BYacc/J兼容模式，其等同于以下指令集：
+            </p>
+            <pre><code>
+                %integer
+                %eofval{
+                  return 0;
+                %eofval}
+                %eofclose
+            </code></pre>
+        </li>
+    </ul>
+    <h3 id="input-character-sets">输入字符集</h3>
+    <ul>
+        <li>
+            <p>
+                <code>%7bit</code>
+            </p>
+            <p>
+                使生成的扫描器使用7位输入字符集（字符代码0-127)。
+                如果在运行时遇到大于127的输入字符，扫描器将抛出一个<code>ArrayIndexOutofBoundsException</code>。
+                不仅因为此，您还应考虑使用<code>%unicode</code>指令。
+                有关字符编码的信息，请参见<a href="#sec:encodings">编码</a>。
+                这是JLex兼容模式下的默认设置。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%full</code><br>
+                <code>%8bit</code>
+            </p>
+            <p>
+                两种选项都会导致生成的扫描器使用8位输入字符集（字符代码0-255)。
+                如果在运行时遇到编码大于255的输入字符，扫描器将抛出<code>ArrayIndexOutofBoundsException</code>。
+                请注意，即使您的平台每个字符仅使用一个字节，字符的Unicode值仍可能大于255。
+                如果您正在扫描文本文件，建议考虑使用<code>%unicode</code>指令。
+                有关字符编码的更多信息，请参阅<a href="#sec:encodings">编码</a>部分。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%unicode</code><br>
+                <code>%16bit</code>
+            </p>
+            <p>
+                两种选项都会导致生成的扫描器使用完整的Unicode输入字符集，包括补充代码点：0-0x10FFFF。
+                <code>%unicode</code>并不意味着扫描器会一次读取两个字节。
+                读取的内容和构成字符的因素取决于运行时平台。
+                有关字符编码的更多信息，请参见第<a href="#sec:encodings">编码</a>部分。
+                除非使用JLex兼容模式（命令行选项<code>--jlex</code>)，否则这是默认设置。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%caseless</code><br>
+                <code>%ignorecase</code>
+            </p>
+            <p>
+                此选项使JFlex以大写和小写形式处理规范中的所有字符和字符串。
+                这使得指定一个具有不区分大小写的关键词的语言扫描器变得简单。
+                例如，规范中的字符串<code>break</code>就像表达式<code>[bB][rR][eE][aA][kK]</code>一样被处理。
+                <code>%caseless</code>选项不会改变匹配的文本，也不会影响字符类。
+                因此，<code>[a]</code>仍然只匹配字符<code>a</code>而不是<code>A</code>。
+                哪些字母是大写字母，哪些是小写字母，由Unicode标准定义。
+                在JLex兼容模式下（命令行中使用<code>--jlex</code>开关），
+                <code>%caseless</code>和<code>%ignorecase</code>还会影响字符类。
+            </p>
+        </li>
+    </ul>
+    <h3 id="line-character-and-column-counting">行、字符和列计数</h3>
+    <ul>
+        <li>
+            <p>
+                <code>%char</code>
+            </p>
+            <p>
+                打开字符计数。<code>long</code>成员变量<code>yychar</code>包含从输入的开始到当前标记的开始之间的字符数（从0开始）。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%line</code>
+            </p>
+            <p>
+                打开行计数。<code>int</code>成员变量<code>yyline</code>包含从输入开始到当前标记开始的行数（从0开始）。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%column</code>
+            </p>
+            <p>
+                打开列计数。<code>int</code>成员变量<code>yycolumn</code>包含从当前行的开头到当前标记的开头的字符数（从0开始）。
+            </p>
+        </li>
+    </ul>
+    <h3 id="warnings">警告</h3>
+    <h4 id="warning-directives">警告指令</h4>
+    <ul>
+        <li>
+            <p><code>%warn &lt;warning&gt;</code></p>
+            <p>
+                启用警告类型<code>&lt;warning&gt;</code>。
+                有关可用的<a href="#WarningTypes">警告类型</a>的列表，请参见下文。
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>%suppress &lt;warning&gt;</code><br>
+                <code>%no-warn &lt;warning&gt;</code>
+            </p>
+            <p>
+                抑制警告类型<code>&lt;warning&gt;</code>。
+                有关可用的<a href="#WarningTypes">警告类型</a>的列表，请参见下文。
+            </p>
+        </li>
+    </ul>
+    <h4 id="WarningTypes">警告类型</h4>
+    <ul>
+        <li>
+            <code>unused</code>: 警告声明但未使用的宏
+        </li>
+        <li>
+            <code>never-match</code>: 警告无法匹配的规则
+        </li>
+        <li>
+            <code>empty-match</code>: 对可以匹配空字符串的规则发出警告
+        </li>
+        <li>
+            <code>cupsym-after-cup</code>: 警告重新声明的<code>cup</code>符号，尽管<code>%cup</code>存在
+        </li>
+        <li>
+            <code>unicode-too-long</code>: 警告有太多数字的unicode逃逸序列
+        </li>
+        <li>
+            <code>all</code>: 打开/关闭所有警告
+        </li>
+    </ul>
+    <h3 id="obsolete-jlex-options">过时JLex选项</h3>
+    <ul>
+        <li>
+            <p><code>%notunix</code></p>
+            <p>
+                这个JLex选项在JFlex中已过时，但仍被视为有效的指令。
+                它过去用于在Windows和Unix类型的行终止符（<code>\r\n</code>和<code>\n</code>）之间切换，以处理正则表达式中的<code>$</code>操作符。
+                JFlex始终识别这两种平台依赖的行终止符风格。
+            </p>
+        </li>
+        <li>
+            <p><code>%yyeof</code></p>
+            <p>
+                此JLex选项在JFlex中已过时，但仍被识别为有效指令。
+                在JLex中，它声明一个公共成员常量<code>YYEOF</code>。
+                无论如何，JFlex都会声明它。
+            </p>
+        </li>
+    </ul>
+    <h3 id="StateDecl">状态声明</h3>
+    <p>状态声明的格式如下：</p>
+    <p>
+        <code>%s[tate] "state identifier" [, "state identifier", ... ]</code>
+        用于包含或者<br>
+        <code>%x[state] "state identifier" [, "state identifier", ... ]</code>
+        用于排除状态
+    </p>
+    <p>
+        可能有多行状态声明，每行以<code>%state</code>或<code>%xstate</code>开头。
+        状态标识符由字母后跟一串字母、数字或下划线组成。状态标识符可以用空格或逗号分隔。
+    </p>
+    <p>序列</p>
+    <pre><code>
+        %state STATE1
+        %xstate STATE3, XYZ, STATE_10
+        %state ABC STATE5
+    </code></pre>
+    <p>
+        声明标识符集<code>STATE1，STATE3，XYZ，STATE_10，ABC，STATE5</code>为词法状态，
+        <code>STATE1</code>、<code>ABC</code>、<code>STATE5</code>为包含关系，
+        而<code>STATE3</code>、<code>XYZ</code>、<code>STATE_10</code>为排他关系。
+        另见<a href="#HowMatched">输入如何匹配</a>了解词法状态如何影响输入的匹配。
+    </p>
+    <h3 id="MacroDefs">宏定义</h3>
+    <p>宏定义的形式为</p>
+    <pre><code>宏标识符 = 正则表达式</code></pre>
+    <p>
+        这意味着，宏定义是一个宏标识符（字母后跟一串字母、数字或下划线），之后可以用来引用该宏，
+        接着是可选的空格，然后是一个<code>=</code>，再接着是可选的空格，
+        最后是一个正则表达式（有关正则表达式语法的更多信息，请参见<a href="#LexRules">词法规则</a>）。
+    </p>
+    <p>
+        右侧的正则表达式必须格式正确，不得包含<code>^</code>、<code>/</code>或<code>$</code>运算符。
+        <em>与JLex不同，宏不仅仅是通过复制扩展的文本片段</em>——它们需要被解析并且必须格式正确。
+    </p>
+    <p>
+        <strong>这是一个特性。</strong>它消除了词法规范中一些非常难以发现的错误（例如，更复杂的宏周围没有括号——这在JFlex中是不必要的）。
+        参见<a href="#Porting">从JLex移植</a>以了解有关JLex风格宏问题的更多详情。
+    </p>
+    <p>
+        由于允许在宏定义中使用宏，因此可以使用类似语法的标记来指定所需的词法结构。
+        然而，宏仍然是它们所代表的正则表达式的缩写。
+        它们不是语法的非终结符，也不能递归使用。
+        JFlex会在宏定义中检测到循环并在生成时报告这些循环。
+        JFlex还会警告你在规范的<em>词法规则</em>部分中定义但从未使用的宏。
+    </p>
+    <h2 id="LexRules">词法规则</h2>
+    <p>
+        JFlex规范的<em>词法规则</em>部分包含一组正则表达式和动作(Java代码），当扫描器匹配关联的正则表达式时，将执行这些动作。
+    </p>
+    <p>
+        <code>%include</code>指令可以在本节中用于包含来自单独文件的词法规则。
+        该指令将被指定文件的内容逐字替换。
+    </p>
+    <h3 id="Grammar">语法</h3>
+    <p>
+        <em>词法规则</em>部分的语法由以下EBNF语法描述（终端符号用'引号'括起来）：
+    </p>
+    <pre><code>
+        LexicalRules ::= (Include|Rule)+
+        Include      ::= '%include' (' '|'\t'|'\b')+ File
+        Rule         ::= [StateList] ['^'] RegExp [LookAhead] Action
+                       | [StateList] '&lt;&lt;EOF&gt;&gt;' Action
+                       | StateGroup
+        StateGroup   ::= StateList '{' Rule+ '}'
+        StateList    ::= '&lt;' Identifier (',' Identifier)* '&gt;'
+        LookAhead    ::= '$' | '/' RegExp
+        Action       ::= '{' JavaCode '}' | '|'
+
+        RegExp       ::= RegExp '|' RegExp
+                       | RegExp RegExp
+                       | '(' RegExp ')'
+                       | ('!'|'~') RegExp
+                       | RegExp ('*'|'+'|'?')
+                       | RegExp "{" Number ["," Number] "}"
+                       | CharClass
+                       | PredefinedClass
+                       | MacroUsage
+                       | '"' StringCharacter+ '"'
+                       | Character
+
+        CharClass    ::= '[' ['^'] CharClassContent* ']'
+                       | '[' ['^'] CharClassContent+
+                             CharClassOperator CharClassContent+ ']'
+
+        CharClassContent    ::= CharClass | Character |
+                                Character'-'Character |
+                                MacroUsage | PredefinedClass
+
+        CharClassOperator   ::= '||' | '&amp;&amp;' | '--' | '~~'
+
+        MacroUsage          ::= '{' Identifier '}'
+
+        PredefinedClass     ::= '[:jletter:]'
+                              | '[:jletterdigit:]'
+                              | '[:letter:]'
+                              | '[:digit:]'
+                              | '[:uppercase:]'
+                              | '[:lowercase:]'
+                              | '\d' | '\D'
+                              | '\s' | '\S'
+                              | '\w' | '\W'
+                              | '\p{' UnicodePropertySpec '}'
+                              | '\P{' UnicodePropertySpec '}'
+                              | '\R'
+                              | '.'
+
+        UnicodePropertySpec ::= BinaryProperty |
+                                EnumeratedProperty (':' | '=') PropertyValue
+
+        BinaryProperty      ::= Identifier
+
+        EnumeratedProperty  ::= Identifier
+
+        PropertyValue       ::= Identifier
+    </code></pre>
+    <p>语法使用以下终端符号：</p>
+    <ul>
+        <li>
+            <p><code>File</code><br>
+                文件名，可以是绝对的，也可以是相对于包含词法规范的目录的相对路径。
+            </p>
+        </li>
+        <li>
+            <p><code>JavaCode</code><br>
+                如《Java语言规范》(Gosling、Joy和Steele，1996年）第14.2节所述，由<code>BlockStatements</code>组成的一系列代码。
+            </p>
+        </li>
+        <li>
+            <p><code>Number</code><br>
+                非负十进制整数。
+            </p>
+        </li>
+        <li>
+            <p><code>Identifier</code><br>
+                一个字母<code>[a-zA-Z]</code>后跟零个或多个字母、数字或下划线<code>[a-zA-Z0-9_]</code>
+            </p>
+        </li>
+        <li>
+            <p><code>Character</code><br>
+                一个转义序列或任何不是这些元字符之一的unicode字符：
+                <code>| ( ) { } [ ] &lt; &gt; \ . * + ? ^ $ / . " ~ !</code>
+            </p>
+        </li>
+        <li>
+            <p><code>StringCharacter</code><br>
+                一个转义序列或任何不是这些元字符之一的unicode字符：<code>\ "</code>
+            </p>
+        </li>
+        <li>
+            <p>一个转义序列</p>
+            <ul>
+                <li>
+                    <p>
+                        <code>\n</code> <code>\r</code> <code>\t</code> <code>\f</code><code>\b</code>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        一个<code>\x</code>后跟两个十六进制数字<code>[a-fA-F0-9]</code>（表示ASCII转义序列）；
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        一个<code>\u</code>字符后跟四个十六进制数字<code>[a-fA-F0-9]</code>，表示一个unicode转义序列。
+                        请注意，这些确实是四个数字，例如&nbsp;<code>\u12345</code>是字符<code>\u1234</code>后跟字符<code>5</code>。
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        一个<code>\U</code>（注意“U”是大写的）后跟六个十六进制数字<code>[a-fA-F0-9]</code>，表示一个unicode代码点转义序列；
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <code>H+( H+)*}</code>，其中<code>H+</code>是一个或多个十六进制数字<code>[a-fA-F0-9]</code>，
+                        每个<code>H+</code>表示一个代码点—注意，在字符类中，仅允许一个代码点；
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        一个反斜杠后跟一个从000到377的三位八进制数，表示一个ASCII转义序列；或
+                    </p>
+                </li>
+                <li>
+                    <p>一个反斜杠，后面跟着代表该字符的任何其他unicode字符。</p>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <p>
+        请注意，<code>\n</code>转义序列代表ASCII行尾字符，而不是行结束符。
+        如果您希望匹配行终止符，应使用表达式<code>\r|\n|\r\n</code>；
+        如果希望遵循Java规范，则使用<code>\r\n|[\r\n\u2028\u2029\u000B\u000C\u0085]</code>（作为预定义类<code>\R</code>提供）；
+        若要完全符合Unicode标准，请参见（Davis和Heninger 2013）。
+    </p>
+    <p>
+        空白字符<code>" "</code>（空格）和<code>\t</code>（制表符）可以用来提高正则表达式的可读性。它们会被JFlex忽略。
+        然而，在字符类和字符串中，空白字符仍然保留其自身（因此字符串<code>" "</code>仍然匹配一个空格字符，
+        而<code>[ \n]</code>仍然匹配一个ASCII行换行符或空格字符）。
+    </p>
+    <p>在常规模式下，JFlex应用以下标准运算符优先级表达式（从高到低）：</p>
+    <ul>
+        <li>
+            <p>
+                一元后缀运算符(<code>*</code>， <code>+</code>，<code>?</code>， <code>{n}</code>， <code>{n,m}</code>)
+            </p>
+        </li>
+        <li>
+            <p>一元前缀运算符(<code>!</code>， <code>~</code>)</p>
+        </li>
+        <li>
+            <p>concatenation (<code>RegExp::= RegExp Regexp</code>)</p>
+        </li>
+        <li>
+            <p>union (<code>RegExp::= RegExp '|' RegExp</code>)</p>
+        </li>
+    </ul>
+    <p>
+        例如，表达式<code>a | abc | !cd*</code>被解析为<code>(a|(abc)) | ((!c)(d*))</code>。
+    </p>
+    <h3 id="Semantics">语义</h3>
+    <p>
+        本节对正则表达式匹配的文本进行了非正式描述；该表达式由语法<a href="#Grammar">下面</a>的<code>RegExp</code>生成的表达式描述。
+    </p>
+    <p>仅由以下内容组成的正则表达式</p>
+    <ul>
+        <li>
+            <p>
+                一个<code>Character</code>匹配当前字符。
+            </p>
+        </li>
+        <li>
+            <p>
+                字符类<code>[...]</code>匹配该类中的任何字符。
+                <code>Character</code>如果列在类中，
+                或者其代码位于列出的字符范围<code>Character‘-’Character</code>或宏或预定义字符类内，则被视为类的元素。
+                例如，<code>[a0-3\n]</code>匹配字符
+            </p>
+            <p><code>a 0 1 2 3 \n</code></p>
+            <p>
+                如果字符列表为空（例如&nbsp;仅<code>[]</code>)，则表达式匹配的内容完全为空（空集），甚至不包括空字符串。
+                这可以与否定运算符<code>!</code>结合使用。
+            </p>
+            <p>
+                字符集可以嵌套， 例如&nbsp;<code>[[[abc]d[e]]fg]</code>等同于<code>[abcdefg]</code>.
+            </p>
+            <p>支持的字符集操作：</p>
+            <ul>
+                <li>
+                    <p>
+                        并集 (<code>||</code>)， 例如&nbsp;<code>[[a-c]||[d-f]]</code>，等同于<code>[a-cd-f]</code>:
+                        当未指定运算符时，这是默认的字符集操作。
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        交集 (<code>&amp;&amp;</code>)， 例如&nbsp;<code>[[a-f]&amp;&amp;[f-m]]</code>，
+                        等同于<code>[f]</code>。
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        差集(<code>--</code>)， 例如&nbsp;<code>[[a-z]--m]</code>，等同于<code>[a-ln-z]</code>。
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        对称差 (<code>~~</code>): 两个类的并集减去它们的交集。 例如
+                    </p>
+                    <pre>
+                        <code>[\p{Letter}~~\p{ASCII}] </code>
+                    </pre>
+                    <p>等同于</p>
+                    <pre><code>
+                        [[\p{Letter}||\p{ASCII}]--[\p{Letter}&amp;&amp;\p{ASCII}]]
+                    </code></pre>
+                    <p>
+                        在<code>\p{Letter}</code>或<code>\p{ASCII}</code>中存在，但不在两者中都存在的字符集。
+                    </p>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <p>
+                否定字符类<code>'[^...]'</code>匹配所有未列在该类中的字符。
+                如果字符列表为空（即<code>[^]</code>)，则表达式匹配输入字符集中的任何字符，包括未配对的Unicode补充字符。
+            </p>
+        </li>
+        <li>
+            <p>
+                字符串<code>’’ StringCharacter+ ’’</code>匹配双引号内的精确文本。
+                除了<code>\</code>和<code>"</code>之外的所有元字符在字符串中都会失去其特殊含义。
+                另请参见<code>%ignorecase</code>开关。
+            </p>
+        </li>
+        <li>
+            <p>
+                宏用法<code>'{' Identifier '}'</code>与名称为<code>Identifier</code>的宏的右侧匹配的输入相匹配。
+            </p>
+        </li>
+        <li>
+            <p>
+                预定义字符类与该类中的任何字符匹配。有以下预定义字符类：
+            </p>
+            <ul>
+                <li>
+                    <p>
+                        由类<code>java.lang.Character</code>中的Java库方法确定的两个预定义字符类别：
+                    </p>
+                    <pre><code>
+                        [:jletter:]       isJavaIdentifierStart()
+                        [:jletterdigit:]  isJavaIdentifierPart()
+                    </code></pre>
+                </li>
+                <li>
+                    <p>
+                        四个预定义字符类，等同于以下Unicode属性（在<a href="#unipropsyntax">下面</a>中进行了说明）：
+                    </p>
+                    <pre><code>
+                        [:letter:]     \p{Letter}
+                        [:digit:]      \p{Digit}
+                        [:uppercase:]  \p{Uppercase}
+                        [:lowercase:]  \p{Lowercase}
+                    </code></pre>
+                </li>
+                <li>
+                    <p>
+                        以下元字符，等同于这些（组）Unicode属性（在<a href="#unipropsyntax">下面</a>中进行了说明）：
+                    </p>
+                    <pre><code>
+                        \d  \p{Digit}
+                        \D  \P{Digit}
+                        \s  \p{Whitespace}
+                        \S  \P{Whitespace}
+                        \w  [\p{Alpha}\p{Digit}\p{Mark}
+                             \p{Connector Punctuation}\p{Join Control}]
+                        \W  [^\p{Alpha}\p{Digit}\p{Mark}
+                        \p{Connector Punctuation}\p{Join Control}]
+                    </code></pre>
+                </li>
+                <li>
+                    <p> <!-- FIXME: inline refs don't link properly in pdf -->
+                        <a name="unipropsyntax"></a>
+                        Unicode属性是每个版本的Unicode标准指定的字符类。
+                        JFlex支持所有定义属性的一个子集，针对每个支持的Unicode版本。 要查看支持的所有属性的完整列表，
+                        请在JFlex命令行加上<code>–uniprops &lt;ver&gt;</code>选项。<code>&lt;ver&gt;</code> 表示Unicode版本。
+                        某些属性有别名；JFlex识别所有支持的属性的所有别名。
+                        JFlex支持松散匹配属性：忽略大小写、空格、连字符和下划线。
+                    </p>
+                    <p>
+                        要引用一个Unicode属性，使用<code>\p{...}</code>语法，例如希腊字母块可以引用为<code>\p{Block:Greek}</code>。
+                        要匹配所有未包含在属性中的字符，使用<code>\P{...}</code>语法（注意‘<code>P</code>’是大写的），
+                        例如&nbsp;要匹配所有不是字母的字符，使用<code>\P{Letter}</code>。
+                    </p>
+                    <p>
+                        参见UTS#18（Davis和Heninger 2013）以获取一些支持属性的描述及其定义链接。
+                        UnicodeSet（“Unicode工具：<span>UnicodeSet</span>“ 2015）是一个在线工具，
+                        用于显示与Unicode属性相对应的字符集以及对这些字符集的操作，但仅限于最新的Unicode版本。
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        点（<code>.</code>）匹配<code>[^\r\n\u2028\u2029\u000B\u000C\u0085]</code>。<br>
+                        使用<code>–legacydot</code>选项以匹配<code>[^\n]</code>。<br>
+                        注意，未配对的Unicode补充字符<code>[\uD800-\uDFFF]</code>不会被<code>.</code>匹配。
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <code>\R</code> 匹配新行:<code>\r\n|[\r\n\u2028\u2029\u000B\u000C\u0085]</code>。
+                    </p>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <p>如果 <code>a</code> and <code>b</code> 是正则表达式， 那么</p>
+    <ul>
+        <li>
+            <p><code>a | b</code> (并集)</p>
+            <p>
+                匹配<code>a</code>或者<code>b</code>
+            </p>
+        </li>
+        <li>
+            <p><code>a b</code> (concatenation)</p>
+            <p>
+                匹配<code>a</code>，后面跟着匹配<code>b</code>。
+            </p>
+        </li>
+        <li>
+            <p><code>a*</code> (Kleene 闭包)</p>
+            <p>
+                匹配<code>a</code>零次或多次
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>a+</code> (iteration)
+            </p>
+            <p>等同于 <code>aa*</code></p>
+        </li>
+        <li>
+            <p><code>a?</code> (可选)</p>
+            <p>
+                匹配<code>a</code>零次或一次
+            </p>
+        </li>
+        <li>
+            <p><code>!a</code> (取反)</p>
+            <p>
+                匹配除<code>a</code>之外的所有内容。
+                谨慎使用：构建<code>!a</code>涉及对<code>a</code>的NFA进行额外的、可能是指数级的NFA到DFA转换。
+                请注意，通过否运算和并运算，你还可以得到交集和差集：<code>a</code>和<code>b</code>的交集是<code>!(!a|!b)</code>，
+                表示<code>a</code>中未被<code>b</code>匹配的所有内容的表达式是<code>!(!a|b)</code>
+            </p>
+        </li>
+        <li>
+            <p><code>~a</code> (upto)</p>
+            <p>
+                匹配到（包括）第一个由<code>a</code>匹配的文本。
+                表达式<code>~a</code>等于<code>!([^]* a [^]*) a</code>。
+                传统的C语言注释由<code>"/*" ~"*/"</code>匹配。
+            </p>
+        </li>
+        <li>
+            <p><code>a {n}</code> (重复)</p>
+            <p>
+                等价于<code>n</code>乘以<code>a</code>的连接。
+                因此，例如<code>a{4}</code>等价于表达式<code>a a a a</code>。
+                十进制整数<code>n</code>必须为正数。
+            </p>
+        </li>
+        <li>
+            <p><code>a {n,m}</code></p>
+            <p>
+                等价于至少<code>a</code>的<code>n</code>次方次和至多<code>a</code>的<code>m</code>次方次的<code>a</code>。
+                因此，例如<code>a{2,4}</code>等价于表达式<code>a a a? a?</code>。
+                <code>n</code>和<code>m</code>都是非负十进制整数，并且<code>m</code>不得小于<code>n</code>。
+            </p>
+        </li>
+        <li>
+            <p><code>(a)</code></p>
+            <p>与<code>a</code>的输入相匹配。</p>
+        </li>
+    </ul>
+    <p>
+        在词法规则中，正则表达式<code>r</code>可能由一个<code>^</code>（行首操作符）引导。<code>r</code>仅在输入的行首匹配。
+        每次出现<code>\r|\n|\r\n|\u2028|\u2029|\u000B|\u000C|\u0085</code>后面都开始新的一行（参见（Davis和Heninger
+        2013）)， 并且在输入的开头也是如此。输入中的前一个行终止符不会被消耗，可以由其他规则匹配。
+    </p>
+    <p>
+        在词法规则中，正则表达式<code>r</code>可能会跟随一个前瞻表达式。
+        前瞻表达式可以是<code>$</code>（行尾操作符）或<code>/</code>后跟任意正则表达式。
+        在这两种情况下，前瞻部分不会被消耗，也不会包含在匹配的文本区域中，
+        但在确定哪个规则有最长匹配时，<strong>它</strong>会被考虑到。
+        关于如何匹配输入，请参见<a href="#HowMatched">如何匹配输入</a>）。
+    </p>
+    <p>
+        在<code>$</code>情况下，<code>r</code>仅匹配输入中某一行的末尾。
+        行的末尾由正则表达式<code>\r|\n|\r\n|\u2028|\u2029|\u000B|\u000C|\u0085</code>
+        表示因此，<code>a$</code>等同于<code>a / \r|\n|\r\n|\u2028|\u2029|\u000B|\u000C|\u0085</code>。
+        这与（Davis和Heninger，2013）中描述的情况不同：
+        因为在JFlex中，<code>$</code>是一个真正的尾随上下文，因此文件末尾<strong>不</strong>算作行结束。
+    </p>
+    <p>
+        对于任意预读（也称为<em>trailing context</em>)，只有在后面跟着与尾随上下文匹配的输入时，表达式才会匹配。
+    </p>
+    <p>
+        在词法规范中JFlex 允许 lex/flex 风格的<code>&lt;&lt;EOF&gt;&gt;</code>规则。 规则
+    </p>
+    <pre><code>
+        [StateList]  &lt;&lt;EOF&gt;&gt;    { action code }
+    </code></pre>
+    <p>
+        非常类似于<code>%eofval</code>指令。 区别在于可选的<code>StateList</code>
+        可能位于<code>&lt;&lt;EOF&gt;&gt;</code>规则之前。
+        只有在读取文件末尾并且扫描器当前处于<code>StateList</code>中列出的某个词法状态时，才会执行动作代码。
+        <code>StateGroup</code> (查阅<a href="#HowMatched">输入如何匹配</a>部分) 适用“正常”规则中的优先权规则。
+        例如&nbsp;对于一个确定的词法状态如果有超过一个<code>&lt;&lt;EOF&gt;&gt;</code>规则，将执行在规范中出现得较早的那个动作)。
+        <code>&lt;&lt;EOF&gt;&gt;</code>规则会覆盖<code>%cup</code>和<code>%byaccj</code>选项的设置，
+        并且不应与<code>%eofval</code>指令混合。
+    </p>
+    <p>
+        一个<code>动作</code>由括号内的Java代码或特殊<code>|</code>操作组成。<code>|</code>操作是以下表达式操作的缩写。
+    </p>
+    <p>示例:</p>
+    <pre><code>
+        expression1   |
+        expression2   |
+        expression3   { some action }
+    </code></pre>
+    <p>等同于展开式</p>
+    <pre><code>
+        expression1   { some action }
+        expression2   { some action }
+        expression3   { some action }
+    </code></pre>
+    <p>
+        在处理尾随上下文表达式时，它们非常有用。
+        表达式<code>a | (c / d) | b</code>不是语法合法的正则表达式，但可以使用<code>|</code>操作来表示：
+    </p>
+    <pre><code>
+        a       |
+        c / d   |
+        b       { some action }
+    </code></pre>
+    <h3 id="HowMatched">输入如何匹配</h3>
+    <p>
+        当扫描器处理输入时，它会确定与最长部分匹配的正则表达式（最长匹配规则）。
+        如果存在多个与输入最长部分匹配的正则表达式（例如&nbsp;它们都匹配相同的输入），生成的扫描器会选择规范中首先出现的那个表达式。
+        确定激活的正则表达式后，相应的动作被执行。
+        如果没有匹配的正则表达式，扫描器将终止并显示错误消息
+        （如果使用了<code>%standalone</code>指令，则扫描器将把不匹配的输入打印到<code>java.lang.System.out</code>并继续扫描）。
+    </p>
+    <p>
+        可以使用词法状态进一步限制与当前输入匹配的正则表达式集。
+    </p>
+    <ul>
+        <li>
+            <p>
+                正则表达式只有在其关联的词法状态集中包含扫描器当前激活的词法状态时才能匹配，
+                或者当关联的词法状态集为空且当前激活的词法状态是包容性的。
+                排他性和包容性状态仅在这一点上有所不同：即具有空关联状态集的规则。
+            </p>
+        </li>
+        <li>
+            <p>
+                可以使用方法<code>yybegin()</code>在正则表达式的动作中更改扫描器当前激活的词法状态。
+            </p>
+        </li>
+        <li>
+            <p>
+                扫描器在包含词法状态<code>YYINITIAL</code>中启动，该状态默认总是被声明。
+            </p>
+        </li>
+        <li>
+            <p>
+                与正则表达式关联的一组词法状态是该表达式前的<code>状态列表</code>。
+                如果一个规则包含在一个或多个<code>状态组</code>中，
+                则这些状态也会与规则关联；例如它们会在<code>状态组</code>中累积。
+            </p>
+            <p>示例:</p>
+            <pre><code>
+                %states A, B
+                %xstates C
+                %%
+                expr1                   { yybegin(A); action }
+                &lt;YYINITIAL, A&gt; expr2    { action }
+                &lt;A&gt; {
+                  expr3                 { action }
+                  &lt;B,C&gt; expr4           { action }
+                }
+            </code></pre>
+            <p>
+                首行声明了两个(包含)词法状态<code>A</code>和<code>B</code>，
+                第二行是一个排他的词法状态<code>C</code>。
+                默认 (包含) 状态 <code>YYINITIAL</code> 是隐含在其中，不需要声明。
+                带有<code>expr1</code>的规则没有状态列表， 因此，除了排他性状态外，所有状态都是匹配的，
+                例如&nbsp;<code>A</code>， <code>B</code>， 和<code>YYINITIAL</code>。
+                在其动作里，扫描器的操作是切换到状态<code>A</code>。
+                第二条规则<code>expr2</code>只有当扫描器处于<code>YYINITIAL</code> 或者 <code>A</code>状态时才会匹配。
+                规则<code>expr3</code>只有处于状态<code>A</code>才会匹配，
+                而规则<code>expr4</code> 则要状态处于<code>A</code>， <code>B</code>， 和<code>C</code>。
+            </p>
+        </li>
+        <li>
+            <p>
+                词法状态在生成的类中以与规范中相同的名字声明并用作Java<code>int</code>常量。
+                不能保证保证这些整数常量的值是不同的。
+                它们是指向生成的DFA表中的指针，如果JFlex识别出两个状态在词法上等价（即使用完全相同的正则表达式集），那么这两个常量将获得相同的值。
+            </p>
+        </li>
+    </ul>
+    <h1 id="GeneratedJavaCode">生成的类</h1>
+    <p>
+        JFlex会从规范中生成一个文件，其中包含一个类（除非在第一个规范部分中声明了另一个类）。
+    </p>
+    <p>
+        生成的类包含（除其他外）DFA表、输入缓冲区、规范的词法状态、构造方法和带有用户提供的动作的扫描方法。
+    </p>
+    <h2 id="GeneratedClassName">生成的类名称</h2>
+    <p>
+        类名默认为<code>Yylex</code>。
+        该名称可以通过<code>%class</code>指令自定义。
+        词法分析器的输入缓冲区通过<code>java.io.Reader</code>对象与外部输入连接，该对象在生成的构造方法中传递给词法分析器。
+        如果您为词法分析器提供自己的构造方法，则应始终调用生成的构造方法以初始化输入缓冲区。
+        不应直接访问输入缓冲区，而只应通过提供的API（另见<a href="#ScannerMethods">Scanner方法</a>）。
+        其内部实现可能在版本或骨架文件发布时发生变化，恕不另行通知。
+    </p>
+    <h2 id="ScanningMethod">扫描方法</h2>
+    <p>
+        与外界的主要接口是生成的扫描方法（默认名称为<code>yylex</code>，默认返回类型为<code>Yytoken</code>）。
+        其大部分方面均可自定义（名称、返回类型、声明的异常等）。
+        如果调用该方法，它将消耗输入直到规范中的某个表达式匹配或发生错误。
+        如果匹配到一个表达式，则执行相应的动作。
+        它可以返回指定的返回类型值（在这种情况下，扫描方法会返回此值），或者如果不返回值，扫描器将继续消耗输入直到下一个表达式匹配。
+        如果到达文件末尾，扫描器执行<code>EOF</code>操作，并且（每次进一步调用扫描方法时）返回指定的<code>EOF</code>值。
+    </p>
+    <h2 id="ScannerMethods">在动作中(API)可访问的扫描方法和字段</h2>
+    <p>
+        生成的方法和成员字段在JFlex扫描器中以<code>yy</code>前缀表示，
+        表明它们是自动生成的，并且为了避免与复制到类中的用户代码发生名称冲突。
+        由于与用户代码属于同一个类，JFlex没有像<code>private</code>修饰符那样的语言手段来标识哪些成员和方法是内部的，哪些属于API。
+        相反，JFlex遵循一种命名约定：所有以<code>zz</code>开头的内容，
+        如<code>zzStartRead</code>，都是内部的，在JFlex版本之间可能会有变动而不会通知。
+        没有<code>zz</code>前缀的生成类的方法和成员，如<code>yycharat</code>，属于扫描器类在规范的动作代码中提供给用户的API。
+        只要可能，这些内容将在JFlex版本之间保持稳定并得到支持。
+    </p>
+    <p>目前，API包含以下方法和成员字段：</p>
+    <ul>
+        <li>
+            <p><code>String yytext()</code></p>
+            <p>返回输入中匹配的文本区域</p>
+        </li>
+        <li>
+            <p><code>int yylength()</code></p>
+            <p>
+                返回输入中匹配的文本区域的长度，作为Java<code>chars</code>的数字（与Unicode码位相反）。
+                它相当于<code>yytext().length()</code>，但速度更快，因为它不需要创建<code>String</code>对象。
+            </p>
+        </li>
+        <li>
+            <p><code>char yycharat(int pos)</code></p>
+            <p>
+                从匹配的文本中返回位置<code>pos</code>处的Java<code>char</code>。
+                它相当于<code>yytext().charAt(pos)</code>，但速度更快。
+                <code>pos</code>必须是一个从<code>0</code>到<code>yylength()-1</code>的值。
+            </p>
+        </li>
+        <li>
+            <p><code>void yyclose()</code></p>
+            <p>
+                关闭输入流。对扫描方法的所有后续调用都将返回文件结束值。
+            </p>
+        </li>
+        <li>
+            <p><code>void yyreset(java.io.Reader reader)</code></p>
+            <p>
+                关闭当前输入流，并重置扫描器以重新读取输入流。
+                所有内部变量都被重置，旧的Reader<em>不能</em>被复用（内部缓冲区的内容已经被丢弃）。
+                词法状态设置为<code>YY_INITIAL</code>。
+                <code>%｛init</code>代码<em>不</em>包含在<code>yyreset</code>中，
+                因为它被假定在构造方法的上下文中运行，而不是在普通方法中运行。
+                如果确实需要重复<code>%{init</code>，请考虑构造一个新的lexer对象，或调用一个执行任何其他用户级状态重置的自定义方法。
+            </p>
+        </li>
+        <li>
+            <p><code>void yypushStream(java.io.Reader reader)</code></p>
+            <p>
+                将当前输入流存储在堆栈上，并从新流中读取。词法状态、行、字符和列计数保持不变。
+                当前输入流可以用<code>yypopStream</code>恢复(通常用于<code>&lt;&lt;EOF&gt;&gt;</code>动作)
+            </p>
+            <p>
+                一个典型的例子是C预处理器风格的包含文件。相应的JFlex规范可能如下：
+            </p>
+            <pre><code>
+                "#include" {FILE}  { yypushStream(new FileReader(getFile(yytext()))); }
+                ...
+                &lt;&lt;EOF&gt;&gt;            { if (yymoreStreams()) yypopStream(); else return EOF; }
+            </code></pre>
+            <p>
+                此方法仅在骨架文件<code>skeleton.nested</code>中可用。您可以在JFlex发行版的<code>src</code>目录中找到它。
+            </p>
+        </li>
+        <li>
+            <p><code>void yypopStream()</code></p>
+            <p>
+                关闭当前输入流，并继续从流堆栈顶部的输入流读取。
+            </p>
+            <p>
+                此方法仅在骨架文件<code>skeleton.nested</code>中可用。您可以在JFlex发行版的<code>src</code>目录中找到它。
+            </p>
+        </li>
+        <li>
+            <p><code>boolean yymoreStreams()</code></p>
+            <p>
+                如果流堆栈上还有<code>yypopStream</code>的流可供读取，则返回true。
+            </p>
+            <p>
+                此方法仅在骨架文件<code>skeleton.nested</code>中可用。您可以在JFlex发行版的<code>src</code>目录中找到它。
+            </p>
+        </li>
+        <li>
+            <p><code>int yystate()</code></p>
+            <p>返回扫描器的当前词法状态。</p>
+        </li>
+        <li>
+            <p><code>void yybegin(int lexicalState)</code></p>
+            <p>进入词法状态<code>lexicalState</code></p>
+        </li>
+        <li>
+            <p><code>void yypushback(int number)</code></p>
+            <p>
+                将匹配文本的<code>number</code>个Java<code>字符</code>（与Unicode码位相反）推回输入流。
+                它们将在扫描方法的下一次调用中再次读取。
+                要再次读取的字符数不得大于匹配文本的长度。
+                被推回的字符将不会包含在<code>yylength()</code>和<code>yytext()</code>中。
+                请注意，在Java中，字符串是不可更改的，即动作代码类似
+            </p>
+            <pre><code>
+                String matched = yytext();
+                yypushback(1);
+                return matched;
+            </code></pre>
+            <p>将返回整个匹配的文本，而</p>
+            <pre><code>
+                yypushback(1);
+                return yytext();
+            </code></pre>
+            <p>将返回匹配的文本减去最后一个字符。</p>
+            <p>
+                请注意，补充Unicode字符（即基本多语言平面之上的字符）在Java字符串中由成对的Unicode代理字符表示，
+                因此，如<code>[^]</code>（任何字符）和<code>\p{...}</code>（具有Unicode属性的字符）等表达式可以匹配多个<code>char</code>。
+            </p>
+        </li>
+        <li>
+            <p><code>yyatEOF()</code></p>
+            <p>
+                返回扫描器是否已到达其读取的输入流的末尾，这通常对应于文件的末尾。
+            </p>
+        </li>
+        <li>
+            <p><code>int yyline</code></p>
+            <p>
+                包含当前输入行（从0开始，仅在<code>lineCounting</code>指令下有效）
+            </p>
+        </li>
+        <li>
+            <p><code>long yychar</code></p>
+            <p>
+                包含输入中的当前字符计数（从0开始，仅在<code>charCounting</code>指令下有效）
+            </p>
+        </li>
+        <li>
+            <p><code>int yycolumn</code></p>
+            <p>
+                包含当前行的当前列（从0开始，仅在<code>columnCounting</code>指令下有效）
+            </p>
+        </li>
+    </ul>
+    <h1 id="sec:encodings">编码、平台和Unicode</h1>
+    <p>
+        本节讨论Unicode和编码、跨平台扫描以及如何处理二进制数据。
+    </p>
+    <h2 id="the-problem">问题</h2>
+    <p>
+        Java的目标是独立于实现平台，但不同的平台使用不同的方式对字符进行编码。
+        此外，在一个平台（如Windows）上编写的文件稍后可能会被另一个平台上的扫描器读取，例如Linux。
+    </p>
+    <p>
+        如果程序从磁盘读取文件，它真正读取的是字节流。这些字节可以以不同的方式映射到字符。
+        例如，在标准ASCII码中，字节值65代表字符<code>A</code>，
+        在编码<code>iso-latin-1</code>中，字节值213代表变音字符<code>ä</code>，
+        但在编码<code>iso-lating-2</code><!-- FIXME: check -->中字节值213代表的反而是<code>é</code>。
+        只要一致使用一种编码，这就没有问题。您使用的编码中可能没有某些字符，但至少不同程序之间对字节和字符之间映射的解释是一致的。
+    </p>
+    <p>
+        然而，当你的程序在多个平台上运行时，就像Java的情况一样，事情会变得更加复杂。
+        Java的解决方案是在内部使用Unicode。Unicode旨在能够表示所有已知的字符集，因此可能是在世界各地和不同平台上使用的用于编码东西的完美基础。
+        为了使事情正常工作，你仍然需要知道你在哪里，以及如何将字节值映射到Unicode字符，
+        反之亦然，但重要的是，这种映射至少是可能的（你可以将汉字字符映射到Unicode，但你不能将它们映射到ASCII或<code>iso-latin-1</code>）。
+    </p>
+    <h2 id="scanning-text-files">扫描文本文件</h2>
+    <p>
+        扫描文本文件是JFlex等扫描器的标准应用程序。因此，它也应该是最方便的。大多数时候是这样。
+    </p>
+    <p>
+        以下场景运行良好：您在X平台上工作，在那里编写词法分析器规范，可以随意使用其中任何模糊的Unicode字符，并编译程序。
+        您的用户在任何平台Y上工作（可能但不一定与X不同），他们在Y上编写输入文件，并在Y上运行您的程序。没有问题。
+    </p>
+    <p>
+        Java的做法如下：如果你想在Java中读取任何应该包含文本的内容，
+        你可以使用<code>FileReader</code>，它将文件的字节转换为平台默认编码的Unicode字符。
+        如果文本文件是在同一平台上生成的，则平台的默认编码应能正确进行映射。
+        由于JFlex内部也使用Reader和Unicode，因此这种机制也适用于扫描器规范。
+        如果你在文本编辑器中编写了一个<code>A</code>，编辑器使用平台的编码（比如<code>A</code>65），
+        那么Java会在内部将其转换为逻辑Unicode<code>A</code>。
+        如果用户在完全不同的平台上编写<code>a</code>（比如<code>a</code>237），
+        那么Java也会在内部将其转换为逻辑Unicode<code>A</code>。转换后再进行扫描，两者匹配。
+    </p>
+    <p>
+        请注意，由于这种从字节到字符的映射，如果你想扫描文本文件，你应该在lexer规范中始终使用<code>%unicode</code>开关。
+        <code>%8bit</code>可能还不够，即使您知道您的平台每个字符只使用一个字节。
+        例如，许多Windows计算机上使用的编码<code>Cp1252</code>拥有256个字符，
+        但具有<code>Cp1252</code>编码的字符<code>'</code><code>\x92</code>的字符具有大于255的Unicode值<code>\u2019</code>，
+        如果遇到这种情况，扫描器将抛出<code>ArrayIndexOutOfBoundsException</code>。
+    </p>
+    <p>
+        因此，对于通常的情况，您不必做任何事情，只需在lexer规范中使用<code>%unicode</code>开关。
+    </p>
+    <p>
+        当你在X平台上生成一个文本文件并在另一个Y平台上使用它时，可能会出现问题。
+        假设您在Windows PC上使用编码<code>Cp1252</code>编写了一个文件。
+        然后，您将此文件移动到编码为<code>ISO 8859-1</code>的Linux PC上，并在那里运行扫描器。
+        Java现在认为该文件是用<code>ISO 8859-1</code>（平台的默认编码）编码的，而实际上是用<code>Cp1252</code>编码的。
+        对于大多数字符<code>Cp1252</code>和<code>ISO 8859-1</code>是相同的，
+        但对于字节值<code>\x80</code><code>\x9f</code>，它们是不一致的：<code>ISO 8859-1</code>并没有定义。
+        您可以通过明确地告诉Java使用哪种编码来解决这个问题。在构造<code>InputStreamReader</code>时，您可以将编码作为参数给出。行
+    </p>
+    <pre><code>
+        Reader r = new InputStreamReader(input, Cp1252);
+    </code></pre>
+    <p>会完成这个技巧。</p>
+    <p>
+        当然，要使用的编码也可以来自数据本身：例如，当您扫描HTML页面时，它可能在标题中嵌入了有关其字符编码的信息。
+    </p>
+    <p>
+        有关编码、支持哪些编码、如何调用编码以及如何设置编码的更多信息，请参阅国际化一章中的官方Java文档。
+        链接
+        <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/intl/" class="uri">
+            http://docs.oracle.com/javase/7/docs/technotes/guides/intl/
+        </a>
+        指向了了Oracle JDK 1.7的在线版本。
+    </p>
+    <h2 id="scanning-binaries">扫描二进制</h2>
+    <p>
+        扫描二进制文件比扫描文本文件更容易，也更困难。这更容易，因为你想要的是原始字节，而不是它们的含义，也就是说，你不想要任何转换。
+        这更难，因为当你使用Java readers时，“不转换”并不容易。
+    </p>
+    <p>
+        问题（对于二进制文件）是JFlex扫描器被设计用于处理文本。因此，接口是<code>Reader</code>类。
+        当你编写自己的自定义<code>InputStreamReader</code>类时，
+        你仍然可以得到一个二进制扫描器，该类显式地不进行转换，而只是将字节值复制到字符代码中。
+        这听起来很容易，实际上也没什么大不了的，但途中也有一些陷阱。
+        在扫描器规范中，您只能输入正字符编码（字节从<code>\x00</code>到<code>\xFF</code>）。
+        另一方面，Java的<code>byte</code>类型是一个有符号的8位整数（-128到127），因此您必须在自定义的<code>Reader</code>中相应地转换它们。
+        此外，在编写lexer规范时，您应该小心：如果您在其中使用文本，它将首先由编码进行解释，
+        而您得到的扫描器可能取决于您在生成扫描器时在哪个平台上运行JFlex（这时您想要的文本，但对于二进制文件，它会造成阻碍）。
+        如果你不确定，或者开发平台可能会发生变化，最好在所有地方都使用字符编码转义，因为它们不会改变自己的含义。
+    </p>
+    <h2 id="unicoderegexconformance">符合Unicode正则表达式UTS#18</h2>
+    <p>
+        本节详细介绍了JFlex 1.9.1与UTS#18（Davis和Heninger2013）中给出的基本Unicode支持级别1要求的一致性。
+    </p>
+    <h3 id="rl1.1-hex-notation">RL1.1十六进制符号</h3>
+    <blockquote>
+        <p>
+            <em>为了满足这一要求，实现应提供一种机制，使用十六进制码点表示来指定任何Unicode码点（从U+0000到U+10FFFF）</em>
+        </p>
+    </blockquote>
+    <p>
+        JFlex符合要求。通过<code>\uXXXX</code>提供语法来表示整个范围内的值，
+        其中<code>XXXX</code>是一个4位十六进制值<code>\Uyyyyyy</code>，其中<code>yyyyyy</code>是一个6位十六进制值；
+        以及<code>\u{X+( X+)*}</code>，其中<code>X+</code>是一个1-6位的十六进制值。
+    </p>
+    <h3 id="rl1.2-properties">RL1.2属性</h3>
+    <blockquote>
+        <p>
+            <em>
+                为了满足这一要求，实现应至少提供一个最小的属性列表，
+                包括以下内容：通用类别、脚本和脚本扩展、字母、大写、小写、白色空间、非字符编码点、默认可忽略编码点、任意、ASCII、分配
+            </em>
+        </p>
+        <p>
+            <em>
+                这些属性的值必须遵循Unicode定义，并包括UCD中的属性和属性值别名。二进制、枚举、目录和名称值的匹配必须遵循[UAX44]中的匹配规则。
+            </em>
+        </p>
+    </blockquote>
+    <p>
+        JFlex符合要求。支持最小的属性集以及其他一些属性。
+        为了查阅支持属性的完整列表， 使用 JFlex 命令行参数<code>--uniprops &lt;ver&gt;</code>，<code>&lt;ver&gt;</code>
+        表示Unicode版本。
+        执行松散匹配：忽略属性名称和值中的大小写区分、空格、下划线和连字符。
+    </p>
+    <h3 id="rl1.2a-compatibility-properties">RL1.2a兼容性特性</h3>
+    <blockquote>
+        <p>
+            <em>
+                为满足这一要求，实施应提供附件C：兼容性属性中列出的属性，以及其中列出的属性值。这种实现应记录它是使用标准建议还是POSIX兼容属性。
+            </em>
+        </p>
+    </blockquote>
+    <p>
+        JFlex不完全符合。提供了附录C兼容性属性的标准建议版本，
+        但有两个例外：<code>\X</code>扩展Grapheme Clusters；以及<code>\b</code>默认单词边界。
+    </p>
+    <h3 id="rl1.3-subtraction-and-intersection">RL1.3 差集和交集</h3>
+    <blockquote>
+        <p>
+            <em>
+                为了满足这一要求，实现应提供Unicode集的并集、交集和差集机制。
+            </em>
+        </p>
+    </blockquote>
+    <p>JFlex通过提供这些机制以及对称差异来符合要求。</p>
+    <h3 id="rl1.4-simple-word-boundaries">RL1.4简单单词边界</h3>
+    <blockquote>
+        <p><em>为了满足这一要求，实现应扩展单词边界机制，以便：</em></p>
+        <ol type="1">
+            <li>
+                <p>
+                    <em>
+                        类<code>&lt;word_character&gt;</code>包括Unicode字符数据库、UnicodeData.txt[UData]中的所有字母值，
+                        加上小数（General_Ccategory=Decimal_Number，或等效的Numeric_Type=Decimal），
+                        以及U+200C零宽度非JOINER和U+200D零宽度JOINER（Join_Control=True）。另见附录C：兼容性特性。
+                    </em>
+                </p>
+            </li>
+            <li>
+                <p><em>非空格标记从不与其基本字符分开，否则在定位边界时会被忽略。</em></p>
+            </li>
+        </ol>
+    </blockquote>
+    <p>
+        JFlex不符合：<code>\b</code>与简单的单词边界不匹配。
+    </p>
+    <h3 id="rl1.5-simple-loose-matches">RL1.5简单宽松匹配</h3>
+    <blockquote>
+        <p>
+            <em>
+                为了满足这一要求，如果一个实现提供了不区分大小写的匹配，
+                那么它至少应该提供简单的默认Unicode不区分大小记的匹配，并指定哪些属性是关闭的，哪些不是。
+            </em>
+        </p>
+        <p>
+            <em>
+                为了满足这一要求，如果一个实现提供了大小写转换，那么它至少应该提供简单的默认Unicode大小写折叠。
+            </em>
+        </p>
+    </blockquote>
+    <p>JFlex符合要求。所有支持的Unicode属性均已关闭。</p>
+    <h3 id="rl1.6-line-boundaries">RL1.6行边界</h3>
+    <blockquote>
+        <p>
+            <em>
+                为了满足这一要求，如果一个实现提供了行边界测试，
+                它不仅应识别CRLF、LF、CR，还应识别NEL（U+0085）、段落分隔符（U+2029）和行分隔符（U+2028）。
+            </em>
+        </p>
+    </blockquote>
+    <p>JFlex 符合要求。</p>
+    <h3 id="rl1.7-supplementary-code-points">RL1.7补充代码点</h3>
+    <blockquote>
+        <p>
+            <em>
+                为了满足这一要求，实现应处理所有Unicode码位，包括从U+FFFF到U+10FFFF的值。
+                特别是，在使用UTF-16的情况下，由前导代理和尾随代理组成的序列在匹配时应作为单个码点处理。
+            </em>
+        </p>
+    </blockquote>
+    <p>JFlex符合要求。</p>
+    <h1 id="performance">关于性能的几句话</h1>
+    <p>本节给出了如何使您的规范产生更快的扫描器的提示。</p>
+    <p>
+        一般来说，JFlex生成的正则表达式匹配具有很好的性能。
+        它是基于DFA（确定性有限自动机）的，不需要像perl风格的正则表达式匹配那样对替代方案进行回溯。
+        在最佳情况下，每个字符只检查一次，在下面解释的某些情况下，需要少量的回溯来确定最长的匹配。
+    </p>
+    <p>
+        即使在基于DFA的扫描器类中，JFlex生成的扫描器通常也会在没有特殊优化的情况下显示出非常好的性能。
+        下面列出了一些启发式方法，可以使词法规范产生更快的扫描器。这些（大致按性能提升的顺序）是：
+    </p>
+    <ul>
+        <li>
+            <p>避免需要回溯的规则</p>
+            <p>
+                虽然JFlex中没有像<code>a|b</code>这样的表达式的回溯，但一些回溯仍然是由最长匹配规则引入的，例如发生在这组表达式上：
+            </p>
+            <pre><code>
+                averylongkeyword
+                .
+            </code></pre>
+            <p>
+                对于输入<code>averylongjok</code>，扫描器必须读取所有字符，
+                直到<code>'j'</code>，才能确定规则<code>.</code>应该匹配。
+                在下一个匹配过程中，必须再次读取<code>很长的</code>所有字符。
+            </p>
+            <p>
+                从C/C++flex（Paxson 1995）的手册页来看：
+                <em>摆脱回溯是一件很麻烦的事情，对于一个复杂的扫描器来说，这可能是一项巨大的工作。</em>
+                通常可以通过添加与这些错误条件匹配的错误规则来避免回溯
+            </p>
+            <pre><code>
+                "av"|"ave"|"avery"|"averyl"|..
+            </code></pre>
+            <p>
+                虽然这在大多数扫描器中是不切实际的，但仍然有可能为一长串关键字添加一个<em>捕获所有</em>规则
+            </p>
+            <pre><code>
+                "keyword1"  { return symbol(KEYWORD1); }
+                ..
+                "keywordn"  { return symbol(KEYWORDn); }
+                [a-z]+      { error("not a keyword"); }
+            </code></pre>
+            <p>
+                大多数编程语言扫描器已经为某种可变长度标识符制定了这样的规则，这意味着编程语言扫描器的这种回溯通常最多只涉及一个字符。
+            </p>
+        </li>
+        <li>
+            <p>避免行和列计数</p>
+            <p>
+                它需要对每个输入字符进行多次额外的比较，并且必须重新扫描匹配的文本以进行计数。
+                在大多数扫描器中，每次匹配行终止符时，都可以通过递增<code>yyline</code>来进行规范中的行计数。
+                列计数也可以包含在动作中。这将更快，但在某些情况下可能会变得相当混乱。
+            </p>
+        </li>
+        <li>
+            <p>
+                避免前瞻性表达和行尾运算符<code>$</code>
+            </p>
+            <p>
+                在最好的情况下，必须首先读取尾随上下文（因为它不会被消耗），然后再次重新读取。
+                通过匹配连接，然后推回所需的字符量，可以有效地处理固定长度前瞻和固定长度基表达式的情况。
+                这扩展到固定长度先行表达式（如<code>r1 / \r|\n|\r\n</code>）的析取情况。
+                所有其他情况<code>r1 / r2</code>都是通过首先扫描<code>r1</code>和<code>r2</code>的连接，
+                然后找到<code>r1</code>的正确结尾来处理的。
+                通过再次向前扫描匹配中的<code>r1</code>，标记所有可能的<code>r1</code>终止符，然后从末尾反向扫描<code>r2</code>，
+                直到<code>r2</code>的开头与<code>r1</code>的结尾相交，来找到 <code>r1</code>的结尾。
+            </p>
+        </li>
+        <li>
+            <p>避免行起始符<code>^</code></p>
+            <p>
+                每次匹配需要进行多次额外的比较。在某些情况下，需要一个额外的先行字符（当读取的最后一个字符是<code>\r</code>时，
+                扫描器必须提前读取一个字符，以检查下一个字符是否是 <code>\n</code>。)
+            </p>
+        </li>
+        <li>
+            <p>在规则中匹配尽可能多的文本。</p>
+            <p>
+                一条规则在扫描器的最内层循环中匹配。每次操作后，设置扫描器的内部状态都是必要的，并且会产生一点开销。
+            </p>
+        </li>
+    </ul>
+    <p>
+        请注意，在规范中编写更多规则不会使生成的扫描器变慢。
+    </p>
+    <p>
+        优化的两个主要规则也适用于词法规范：
+    </p>
+    <ol type="1">
+        <li><strong>不要这样做</strong></li>
+        <li><strong>（仅限专家）还没这样做</strong></li>
+    </ol>
+    <p>
+        上面的一些性能提示与可读性和简洁性的规范风格相矛盾。当有疑问或需求尚未确定时：不要使用它们——规范总是可以在开发过程的后期进行优化。
+    </p>
+    <h1 id="Porting">移植问题</h1>
+    <h2 id="porting-from-jlex">从JLex移植</h2>
+    <p>
+        JFlex旨在读取旧的未变化的JLex规范，并生成一个与JLex生成的扫描器行为完全相同的扫描器，唯一的区别是速度更快。
+    </p>
+    <p>
+        这在所有结构良好的JLex规范上都能正常工作。
+    </p>
+    <p>
+        由于上面的陈述有点绝对，让我们来看看<em>格式良好的</em>在这方面意味着什么。JLex规范格式良好意味着
+    </p>
+    <ul>
+        <li>
+            <p>使用JLex生成可工作的扫描器</p>
+        </li>
+        <li>
+            <p>
+                不包含未转义字符<code>!</code>和<code>~</code>
+            </p>
+            <p>
+                它们是JFlex中的运算符，而JLex将它们视为普通输入字符。
+                通过把所有正则表达式中的每个 <code>!</code>替换为 <code>\!</code>
+                <code>~</code>替换为<code>\~</code>，
+                您可以轻松地将这样的JLex规范移植到JFlex。
+            </p>
+        </li>
+        <li>
+            <p>宏定义中只有用括号括起来的完整正则表达式</p>
+            <p>
+                这听起来可能有点苛刻，但通常不是一个大问题——它还可以帮助你在规范中发现一些迄今为止未被注意到的令人厌恶的错误。
+                在JLex中，宏的右侧只是一段复制到宏使用点的文本。有了这个，事情就像
+            </p>
+            <pre><code>
+                macro1 = ("hello"
+                macro2 = {macro1})*
+            </code></pre>
+            <p>
+                这是可能的（<code>macro2</code>扩展为<code>("hello")*</code>）。
+                这在JFlex中是不允许的，您必须转换这些定义。JLex宏可能会引入更微妙的错误。
+                考虑一个定义，如<code>macro = a|b</code>，以及一个用法，如<code>{macro}*</code>。
+                这在JLex中扩展为<code>a|b*</code>，而不是可能预期的<code>(a|b)*</code>。
+            </p>
+            <p>基本上，JLex使用C预处理器风格的宏，而JFlex使用语法定义。</p>
+            <p>
+                大多数规范都不应该遇到这个问题，因为宏通常只包含（无害的）字符类，如<code>alpha = [a-zA-Z]</code>，以及更危险的定义，如
+            </p>
+            <p><code>ident = {alpha}({alpha}|{digit})*</code></p>
+            <p>仅用于编写以下规则</p>
+            <p><code>{ident} { .. action .. }</code></p>
+            <p>而不是更复杂的表达，比如</p>
+            <p><code>{ident}* { .. action .. }</code></p>
+            <p>其中会出现上述错误。</p>
+        </li>
+    </ul>
+    <h2 id="porting-from-lexflex">从lex/flex移植</h2>
+    <p>
+        本节不完整地概述了将词法规范从大多数Unix系统上可用的
+        C/C++工具<code>lex</code>和<code>flex</code>（Paxson 1995）移植到JFlex的潜在陷阱和步骤。
+    </p>
+    <p>
+        大多数C/C++特有的特性自然不会出现在JFlex中，但大多数“干净”的lex/flex词法规范可以移植到JFlex，而不需要太多的工作。
+    </p>
+    <h3 id="basic-structure">基本结构</h3>
+    <p>
+        flex的词法规范具有以下基本结构：
+    </p>
+    <pre><code>
+        定义
+        %%
+        规则
+        %%
+        用户代码
+    </code></pre>
+    <p>
+        <code>用户代码</code>部分通常包含在规范的<code>规则</code>部分的操作中使用的C代码。
+        对于JFlex，此代码必须转换为Java，然后大部分代码将进入<code>选项和声明</code>部分中的类代码<code>%｛..%｝</code>指令。
+    </p>
+    <h3 id="macros-and-regular-expression-syntax">宏和正则表达式语法</h3>
+    <p>
+        flex规范的<code>定义</code>部分与JFlex规范的<code>选项和声明</code>部分非常相似。
+    </p>
+    <p>flex中的宏定义具有以下形式：</p>
+    <pre><code>&lt;identifier&gt;  &lt;expression&gt;</code></pre>
+    <p>
+        为了把它们移植到JFlex宏， 只需要在<code>&lt;identifier&gt;</code> 和
+        <code>&lt;expression&gt;</code>之间插入<code>=</code>。
+    </p>
+    <p>
+        flex中正则表达式的语法和语义与JFlex中的几乎相同。需要注意flex中存在的转义序列（如<code>\a</code>），
+        这些序列在JFlex中不受支持。这些转义序列应转换为其unicode等效序列。
+    </p>
+    <h3 id="character-classes">字符集</h3>
+    <p>
+        Flex提供C直接支持的字符类，JFlex提供Java支持的字符类时。这些类有时必须手动列出。
+    </p>
+    <p>
+        在flex中，更多的特殊字符在字符类中失去了意义。特别是
+        <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+    <ul>
+        <li>
+            <p>
+                在flex<code>[][]</code>是包含<code>]</code> 和 <code>[</code>的字符类，
+                然而在JFlex， 该表达式意味着“空表达式” 后面跟着 “空表达式”。
+                因此在JFlex为了匹配<code>]</code> 和 <code>[</code>，可使用<code>[\]\[]</code>。
+            </p>
+        </li>
+        <li>
+            <p>
+                类<code>[]</code>和<code>[^]</code> 在flex是非法的， 但是在JFlex是有意义的。</p>
+        </li>
+        <li>
+            <p>
+                在flex中<code>["]</code>是合法的， 在JFlex则需要这样写<code>[\"]</code>。
+            </p>
+        </li>
+    </ul>
+    <h3 id="lexical-rules">词法规则</h3>
+    <p>由于flex主要基于Unix， ’<code>^</code>’ (行起始) 和 ’<code>$</code>’ (行结束) 操作符，
+        考虑<code>\n</code> 字符仅仅作为行终止符。
+        这通常不会造成太多问题，但你应该为<code>\r</code> 或 <code>\r\n</code>
+        或字符之一的<code>\u2028</code>， <code>\u2029</code>，
+        <code>\u000B</code>，<code>\u000C</code>，或<code>\u0085</code>的出现做好准备。
+        它们被认为是Unicode中的行终止符，因此当规则中存在<code>^</code>或<code>$</code>时，它们可能不会被消耗。
+    </p>
+    <h1 id="WorkingTog">协同工作</h1>
+    <h2 id="CUPWork">JFlex 和 CUP</h2>
+    <p>
+        JFlex的设计目标之一是使其与解析器生成器CUP（Hudson 1996）和CUP2（Petter 2008）的交互尽可能简单。
+        这是通过在JFlex中提供<code>%cup</code>和<code>%cup2</code>指令来实现的。
+        然而，每个接口都有两面。本节重点介绍CUP方面的情况。
+    </p>
+    <h3 id="cup2">CUP2</h3>
+    <p>
+        请参阅CUP2（Petter 2008）文档，其中提供了如何与JFlex接口的说明。对于大于1.5.0的JFlex版本，不需要提供CUP2 JFlex补丁。
+    </p>
+    <h3 id="cup-version-0.10j-and-above">CUP 0.10j及以上版本</h3>
+    <p>
+        自CUP版本0.10j以来，新的CUP扫描器接口<code>java_cup.runtime.Scanner</code>大大简化了与JFlex的交互。
+        当使用<code>%cup</code>开关时，JFlex词法分析器现在会自动实现此接口。
+        在CUP解析器规范中，您不再需要提供特殊的<code>解析器代码</code>、<code>初始化代码</code>或<code>扫描选项</code>。
+        你可以专注于你的语法。
+    </p>
+    <p>
+        如果生成的词法分析器的类名为<code>Scanner</code>，解析器将从主程序启动，如下所示：
+    </p>
+    <pre><code>...
+      try {
+        parser p = new parser(new Scanner(new FileReader(fileName)));
+        Object result = p.parse().value;
+      }
+      catch (Exception e) {
+      ...
+    </code></pre>
+    <h3 id="custom-symbol-interface">自定义符号接口</h3>
+    <p>
+        如果您使用CUP的<code>-symbol</code>命令行开关更改了生成的符号接口的名称，则必须将此接口更改告知JFlex，以便生成正确的文件结束代码。
+        您可以通过使用<code>%eofval{</code>指令或使用<code>&lt;&lt;EOF&gt;&gt;</code>规则来实现。
+    </p>
+    <p>
+        例如，如果你的新符号接口名为<code>mysym</code>，那么jflex规范中的相应代码将是
+    </p>
+    <pre><code>
+        %eofval{
+          return mysym.EOF;
+        %eofval}
+    </code></pre>
+    <p>在规范的宏/指令部分，或将会是</p>
+    <pre><code>
+        &lt;&lt;EOF&gt;&gt;  { return mysym.EOF; }
+    </code></pre>
+    <p>在你的规范的规则部分。</p>
+    <h3 id="using-existing-jflexcup-specifications-with-cup-0.10j-and-above">
+        在CUP 0.10j及以上版本中使用现有的JFlex/CUP规范
+    </h3>
+    <p>
+        如果您已经有一个现有的规范，并且想将JFlex和CUP都升级到最新版本，您可能需要调整您的规范。
+    </p>
+    <p>
+        JFlex 1.2.1及更低版本中的<code>%cup</code>开关与最新版本的主要区别在于，
+        JFlex扫描器现在自动实现了<code>java_cup.runtime.Scanner</code>接口。
+        这意味着扫描方法将其名称从<code>yylex()</code>更改为<code>next_token()</code>。
+    </p>
+    <p>
+        与旧版CUP到0.10j的主要区别在于，CUP现在有一个默认构造方法，接受<code>java_cup.runtime.Scanner</code>作为参数，
+        并默认使用此扫描器（因此不再需要<code>scan with</code>代码）。
+    </p>
+    <p>
+        如果你有一个现有的CUP规范，它可能看起来有点像这样：
+    </p>
+    <pre><code>
+        parser code {:
+          Lexer lexer;
+
+          public parser (java.io.Reader input) {
+            lexer = new Lexer(input);
+          }
+        :};
+
+        scan with {: return lexer.yylex(); :};
+    </code></pre>
+    <p>要升级到CUP 0.10j，您可以将其更改为如下形式：</p>
+    <pre><code>
+        parser code {:
+          public parser (java.io.Reader input) {
+            super(new Lexer(input));
+          }
+        :};
+    </code></pre>
+    <p>
+        如果你不介意更改调用解析器的方法，你可以完全删除构造方法（如果其中没有其他内容，则删除整个<code>解析器代码</code>部分）。
+        然后，调用解析器的主方法将构造解析器，如上文所示。
+    </p>
+    <p>JFlex规范不需要更改。</p>
+    <h2 id="BYaccJ">JFlex 和 BYacc/J</h2>
+    <p>
+        JFlex内置了对Bob Jamison的Java扩展
+        <a href="http://byaccj.sourceforge.net/">BYacc/J</a>
+        <span class="citation" data-cites="BYaccJ">(Jamison, n.d.)</span>
+        的支持，以支持经典的Berkeley Yacc解析器生成器。
+        本节介绍如何将BYacc/J与JFlex接口交互。它建立在Larry Bell的许多有用建议和评论之上。
+    </p>
+    <p>
+        由于Yacc的架构与CUP略有不同，因此接口设置的工作方式也略有不同。
+        BYacc/J在解析器类中需要一个方法<code>int yylex()</code>，该方法返回每个下一个令牌。
+        语义值应出现在<code>parserval</code>类型的字段<code>yylval</code>中，其中<code>parser</code>是生成的解析器类的名称。
+    </p>
+    <p>
+        对于一个小型计算器示例，可以在JFlex端使用以下设置：
+    </p>
+    <pre><code>
+        %%
+
+        %byaccj
+
+        %{
+          /* store a reference to the parser object */
+          private parser yyparser;
+
+          /* constructor taking an additional parser object */
+          public Yylex(java.io.Reader r, parser yyparser) {
+            this(r);
+            this.yyparser = yyparser;
+          }
+        %}
+
+        NUM = [0-9]+ ("." [0-9]+)?
+        NL  = \n | \r | \r\n
+
+        %%
+
+        /* operators */
+        "+" |
+        ..
+        "(" |
+        ")"    { return (int) yycharat(0); }
+
+        /* newline */
+        {NL}   { return parser.NL; }
+
+        /* float */
+        {NUM}  { yyparser.yylval = new parserval(Double.parseDouble(yytext()));
+         return parser.NUM; }
+    </code></pre>
+    <p>
+        词法分析器期望在其构造方法中引用解析器。由于Yacc在其规范中允许直接使用<code>'+'</code>等终端字符，
+        因此我们只返回单个字符匹配的字符代码（例如示例中的运算符）。
+        符号标记名称在生成的解析器类中存储为<code>public static int</code>常量。
+        它们的使用方式与上面的<code>NL</code>标记相同。
+        最后，对于某些令牌，可能必须将语义值传递给解析器。<code>NUM</code>规则演示了如何操作。
+    </p>
+    <p>匹配的BYacc/J解析器规范如下：</p>
+    <pre><code>
+        %{
+          import java.io.*;
+        %}
+
+        %token NL          /* newline  */
+        %token &lt;dval&gt; NUM  /* a number */
+
+        %type &lt;dval&gt; exp
+
+        %left '-' '+'
+        ..
+        %right '^'         /* exponentiation */
+
+        %%
+
+        ..
+
+        exp:     NUM          { $$ = $1; }
+               | exp '+' exp  { $$ = $1 + $3; }
+               ..
+               | exp '^' exp  { $$ = Math.pow($1, $3); }
+               | '(' exp ')'  { $$ = $2; }
+               ;
+
+        %%
+          /* a reference to the lexer object */
+          private Yylex lexer;
+
+          /* interface to the lexer */
+          private int yylex () {
+            int yyl_return = -1;
+            try {
+              yyl_return = lexer.yylex();
+            }
+            catch (IOException e) {
+              System.err.println("IO error :"+e);
+            }
+            return yyl_return;
+          }
+
+          /* error reporting */
+          public void yyerror (String error) {
+            System.err.println ("Error: " + error);
+          }
+
+          /* lexer is created in the constructor */
+          public parser(Reader r) {
+            lexer = new Yylex(r, this);
+          }
+
+          /* that's how you use the parser */
+          public static void main(String args[]) throws IOException {
+            parser yyparser = new parser(new FileReader(args[0]));
+            yyparser.yyparse();
+          }
+    </code></pre>
+    <p>
+        在这里，定制部分主要位于用户代码部分。我们在解析器的构造方法中创建词法分析器，
+        并存储对它的引用，以便以后在解析器的<code>int yylex()</code>方法中使用。
+        解析器中的<code>yylex</code>只调用生成的词法分析器的<code>int yylex()</code>并传递结果。如果出现问题，它将返回-1表示错误。
+    </p>
+    <p>
+        上述规范的可运行版本位于JFlex发行版的<code>examples/byaccj</code>目录中。
+    </p>
+    <h2 id="jflex-and-jay">JFlex 和 Jay</h2>
+    <p>
+        JFlex和
+        <a href="http://www.cs.rit.edu/~ats/projects/lp/doc/jay/package-summary.html">Jay 解析器生成器</a>
+        (Schreiner2006) 结合相当简单。
+        Jay解析器生成器定义了一个名为<code>&lt;parsername&gt;.yyInput</code>的接口。 在JFlex源代码中，指令</p>
+    <pre><code>
+        %implements &lt;parsername&gt;.yyInput
+    </code></pre>
+    <p>告诉JFlex生成相应的类声明。</p>
+    <p>要实现的三种接口方法是</p>
+    <ul>
+        <li>
+            <p>
+                <code>advance()</code>如果有更多的工作要做，它应该返回一个布尔值<code>true</code>，
+                如果已经到达输入的末尾，则返回<code>false</code>，
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>token()</code>返回最后一个扫描的token，以及
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>value()</code>返回一个对象，该对象包含最后一个读取标记的（可选）值。
+            </p>
+        </li>
+    </ul>
+    <p>
+        下面显示了一个带有Jay解析器规范和相应JFlex代码的小示例。首先是Jay代码（在文件<code>MiniParser.Jay</code>中）：
+    </p>
+    <pre><code>
+        %{
+        //
+        // Prefix Code like Package declaration,
+        // imports, variables and the parser class declaration
+        //
+
+        import java.io.*;
+        import java.util.*;
+
+        public class MiniParser
+        {
+
+        %}
+
+        // Token declarations, and types of non-terminals
+
+        %token DASH COLON
+        %token &lt;Integer&gt; NUMBER
+
+        %token &lt;String&gt; NAME
+
+        %type &lt;Gameresult&gt; game
+        %type &lt;Vector&lt;Gameresult&gt;&gt; gamelist
+
+        // start symbol
+        %start gamelist
+
+        %%
+
+        gamelist: game        { $$ = new Vector&lt;Gameresult&gt;();
+                                $&lt;Vector&lt;Gameresult&gt;&gt;$.add($1);
+                              }
+          |  gamelist game    { $1.add($2); }
+
+        game: NAME DASH NAME NUMBER COLON NUMBER {
+              $$ = new Gameresult($1, $3, $4, $6); }
+
+        %%
+
+          // supporting methods part of the parser class
+          public static void main(String[] argv)
+          {
+            MiniScanner scanner = new MiniScanner(new InputStreamReader(System.in));
+            MiniParser parser = new MiniParser();
+            try {
+              parser.yyparse (scanner);
+            } catch (final IOException ioe) {
+              System.out.println("I/O Exception : " + ioe.toString());
+            } catch (final MiniParser.yyException ye) {
+              System.out.println ("Oops : " + ye.toString());
+            }
+          }
+
+        } // closing brace for the parser class
+
+        class Gameresult {
+          String homeTeam;
+          String outTeam;
+          Integer homeScore;
+          Integer outScore;
+
+          public Gameresult(String ht, String ot, Integer hs, Integer os)
+          {
+            homeTeam = ht;
+            outTeam = ot;
+            homeScore = hs;
+            outScore = os;
+          }
+        }
+    </code></pre>
+    <p>相应的JFlex代码（MiniScanner.JFlex）可以是</p>
+    <pre>
+        <code>
+            %%
+
+            %public
+            %class MiniScanner
+            %implements MiniParser.yyInput
+            %integer
+
+            %line
+            %column
+            %unicode
+
+            %{
+            private int token;
+            private Object value;
+
+            // the next 3 methods are required to implement the yyInput interface
+
+            public boolean advance() throws java.io.IOException {
+              value = new String("");
+              token = yylex();
+              return (token != YYEOF);
+            }
+
+            public int token() {
+              return token;
+            }
+
+            public Object value() {
+              return value;
+            }
+
+            %}
+
+            nl =     [\n\r]+
+            ws =     [ \t\b\015]+
+            number = [0-9]+
+            name =   [a-zA-Z]+
+            dash =   "-"
+            colon =  ":"
+
+            %%
+
+            {nl}      { /* do nothing */ }
+            {ws}      { /* happy meal */ }
+            {name}    { value = yytext(); return MiniParser.NAME; }
+            {dash}    { return MiniParser.DASH; }
+            {colon}   { return MiniParser.COLON; }
+            {number}  {
+                try  {
+                  value = Integer.valueOf(Integer.parseInt(yytext()));
+                } catch (NumberFormatException nfe) {
+                  // shouldn't happen
+                  throw new Error();
+                }
+                return MiniParser.NUMBER;
+            }
+    </code></pre>
+    <p>这个小示例读取的输入如下</p>
+    <pre><code>
+        Borussia - Schalke 3:2ACMilano - Juventus 1:4
+    </code></pre>
+    <!--
+  Copyright 2023, Gerwin Klein, Régis Décamps, Steve Rowe
+  SPDX-License-Identifier: CC-BY-SA-4.0
+-->
+    <h1 id="Bugs">缺陷和不足</h1>
+    <h2 id="deficiencies">不足</h2>
+    <p>
+        JFlex 1.9.1符合Unicode正则表达式UTS#18（Davis和Heninger2013）基本Unicode支持级别1，但有一些例外。
+        有关详细信息，请参阅<a href="#unicoderegexconformance">UTS#18Compliance</a>。
+    </p>
+    <h2 id="bugs1">缺陷</h2>
+    <p>截至2023年3月11日，JFlex 1.9.1版本没有发现重大开放问题。</p>
+    <p>
+        请使用JFlex
+        <a href="https://github.com/jflex-de/jflex/labels/bug">github issue tracker</a>，
+        用于查找自那以后报告的任何问题。
+    </p>
+    <h1 id="Copyright">复制和许可</h1>
+    <p>JFlex是自由软件，在BSD风格的许可证下发布。</p>
+    <p>JFlex及其代码和文档<strong>不提供担保</strong>。</p>
+    <p>查阅<a href="https://jflex.de/COPYRIGHT"><code>版权</code></a>文件了解更多。</p>
+    <h1 class="unnumbered" id="references">引用</h1>
+    <div id="refs" class="references csl-bib-body hanging-indent" role="list">
+        <div id="ref-Aho_SU_86" class="csl-entry" role="listitem">
+            Aho, Alfred V., Ravi Sethi, and Jeffrey D. Ullman. 1986. <em>Compilers –
+            Principles, Techniques, and Tools</em>. Addison-Wesley.
+        </div>
+        <div id="ref-Appel_98" class="csl-entry" role="listitem">
+            Appel, Andrew W. 1998. <em>Modern Compiler Implementation in
+            <span>Java</span>: Basic Techniques</em>. Cambridge University Press.
+        </div>
+        <div id="ref-JLex" class="csl-entry" role="listitem">
+            Berk, Elliot. 1996. <span>“<span>JLex</span>: A Lexical AnalyzerGenerator for <span>Java</span>.”</span>
+            <a href="http://www.cs.princeton.edu/~appel/modern/java/JLex/" class="uri">
+                http://www.cs.princeton.edu/~appel/modern/java/JLex/
+            </a>.
+        </div>
+        <div id="ref-unicode_rep" class="csl-entry" role="listitem">
+            Davis, Mark, and Andy Heninger. 2013. <span>“Unicode Regular Expressions.”</span>
+            <a href="http://www.unicode.org/reports/tr18/tr18-17.html" class="uri">
+                http://www.unicode.org/reports/tr18/tr18-17.html
+            </a>.
+        </div>
+        <div id="ref-LangSpec" class="csl-entry" role="listitem">
+            Gosling, James, Bill Joy, and Guy Steele. 1996. <em>The
+            <span>Java</span> Language Specification</em>. Addison-Wesley.
+            <a href="https://docs.oracle.com/javase/specs/">https://docs.oracle.com/javase/specs/</a>.
+        </div>
+        <div id="ref-CUP" class="csl-entry" role="listitem">
+            Hudson, Scott E. 1996.
+            <span>“<span>CUP</span> <span>LALR</span> Parser Generator for <span>Java</span>.”</span>
+            <a href="http://www2.cs.tum.edu/projects/cup/" class="uri">http://www2.cs.tum.edu/projects/cup/</a>.
+        </div>
+        <div id="ref-BYaccJ" class="csl-entry" role="listitem">
+            Jamison, Bob. n.d. <span>“<span>BYacc/J</span>.”</span>
+            <a href="http://byaccj.sourceforge.net" class="uri">http://byaccj.sourceforge.net</a>.
+        </div>
+        <div id="ref-flex" class="csl-entry" role="listitem">
+            Paxson, Vern. 1995. <span>“Flex - the Fast Lexical Analyzer Generator.”</span>
+            <a href="http://flex.sourceforge.net" class="uri">http://flex.sourceforge.net</a>.
+        </div>
+        <div id="ref-CUP2" class="csl-entry" role="listitem">
+            Petter, Michael. 2008. <span>“<span>CUP2</span> User Manual.”</span>
+            <a href="http://www2.in.tum.de/cup2" class="uri">http://www2.in.tum.de/cup2</a>.
+        </div>
+        <div id="ref-Jay" class="csl-entry" role="listitem">
+            Schreiner, Axel T. 2006. <span>“Jay Parser Generator.”</span>
+            <a href="http://www.cs.rit.edu/~ats/projects/lp/doc/jay/package-summary.html" class="uri">
+                http://www.cs.rit.edu/~ats/projects/lp/doc/jay/package-summary.html
+            </a>.
+        </div>
+        <div id="ref-UnicodeSet" class="csl-entry" role="listitem">
+            <span>“Unicode Utilities: <span>UnicodeSet</span>.”</span> 2015.
+            <a href="http://unicode.org/cldr/utility/list-unicodeset.jsp" class="uri">
+                http://unicode.org/cldr/utility/list-unicodeset.jsp
+            </a>.
+        </div>
+    </div>
+    <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+        <hr/>
+        <ol>
+            <li id="fn1">
+                <p>
+                    Thanks to Dimitri Maziuk for pointing these out.
+                    <a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a>
+                </p>
+            </li>
+        </ol>
+    </section>
+    <hr class="divider">
+    <footer>
+        <p class="pull-right back"><a href="#content">返回顶部</a></p>
+        <p id="license">
+            © JFlex 团队。网站文本许可位于
+            <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
+                Creative Commons Attribution-NonCommercial-ShareAlike
+            </a>
+        </p>
+    </footer>
+</div>
+
+<script src="./JFlex - manual_files/jquery.min.js" type="text/javascript"></script>
+<script src="./JFlex - manual_files/bootstrap.min.js" type="text/javascript"></script>
+<script src="./JFlex - manual_files/platform.js" type="text/javascript" async="" defer=""></script>
+<script src="./JFlex - manual_files/jflex.js" type="text/javascript"></script>
+</body>
+
+</html>
